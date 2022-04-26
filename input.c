@@ -2,47 +2,58 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "header.h"
-#include "submit_q.c"
-#include "device_mgmt.c"
+// Incoming input will be:
+
+  // System config 'C'
+
+  // Job Arrival 'A'
+
+  // Req 4 devices 'Q'
+
+  // Release devices 'L'
+
+  // Display sys status 'D'
 
 
-int main(void) {
-  read_input();
-  return 0;
-}
+//char line[255];
 
-void read_input() {
-  
-  // Read input of input.txt and build tasks and requests
+void read_file() {
     char op[30];
+    
     // open input file
     FILE *input = fopen("./input.txt", "r");
+    
     /* Get each op until there are none left */
     while (fgets(op, 30, input)) {
-      
+        // print each op 
+        
         char opCode = op[0];
-      
+
         switch (opCode){
           case 'C':
-            sys_config(op); // device_mgmt.c
+            puts("Configuration");
+            printf("%s", op);
             break;
           case 'A':
-            submit_job(op); // device_mgmt.c
+            puts("Job Arrival");
             break;
           case 'Q':
-            device_request(op); // submit_q.c
+            puts("Req for Devices");
+            printf("%s", op);
             break;
           case 'L':
-            release_device(op); // device_mgmt.c
+            puts("Release Deivces");
+            printf("%s", op);
             break;
           case 'D':
             puts("Display Status");
-            printf("%s\n", op);
+            printf("%s", op);
             break;
           
         }
+      
         if (op[strlen(op) - 1] != '\n')
             printf("\n");
+      
     }
 }
