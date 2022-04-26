@@ -26,40 +26,34 @@ void read_file() {
     /* Get each op until there are none left */
     while (fgets(op, 30, input)) {
         // print each op 
-        printf("%s", op);
         
         char opCode = op[0];
 
         switch (opCode){
-          
           case 'C':
             puts("Configuration");
+            printf("%s", op);
             break;
           case 'A':
             puts("Job Arrival");
             break;
           case 'Q':
-            puts("Req 4 Devices");
+            puts("Req for Devices");
+            printf("%s", op);
             break;
           case 'L':
             puts("Release Deivces");
+            printf("%s", op);
             break;
           case 'D':
             puts("Display Status");
+            printf("%s", op);
             break;
           
         }
-        
-            
-          
-          
-        
       
-    
-
-      
-        
         if (op[strlen(op) - 1] != '\n')
             printf("\n");
+      
     }
 }
