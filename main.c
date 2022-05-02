@@ -5,19 +5,8 @@
 
 #include "submit_q.h"
 #include "device_mgmt.h"
-//#include "header.h"
 
 void read_input();
-
-typedef struct Job {
-  int time_arrival;
-  int job_number;
-  int memory_required;
-  int devices_required;
-  int run_time;
-  char priority;
-  struct Job *next;
-} Job;
 
 // submit queue
 
@@ -33,25 +22,27 @@ int main(void) {
 }
 
 void read_input() {
-  
   // Read input of input.txt and build tasks and requests
     char op[30];
     // open input file
     FILE *input = fopen("./input.txt", "r");
     /* Get each op until there are none left */
     while (fgets(op, 30, input)) {
-      
         char opCode = op[0];
       
         switch (opCode){
           case 'C':
             sys_config(op); // device_mgmt.c
             break;
-          case 'A':
-            submit_job(op); // device_mgmt.c
+          case 'A':;  // intentially left a semicolon. Would give an error next line without it
+            Job * job = submit_job(op); // submit_q.c
+
+            // TODO send_2_hold_q(job)
+                // Will add job node to linked list of HQ1 or HQ2 based on priority
+            
             break;
           case 'Q':
-            device_request(op); // submit_q.c
+            device_request(op); // device_mgmt.c 
             break;
           case 'L':
             release_device(op); // device_mgmt.c

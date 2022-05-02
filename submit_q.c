@@ -5,20 +5,11 @@
 #include "submit_q.h"
 
 // struct job i~n~t~e~r~f~a~c~e ... does c even work like that? lol
-typedef struct Job {
-  int time_arrival;
-  int job_number;
-  int memory_required;
-  int devices_required;
-  int run_time;
-  char priority;
-  struct job *next;
-} Job;
 
 //struct Jobs head;
 
 
-void *submit_job(char *job) {
+Job *submit_job(char *job) {
 
   Job *newJob = (Job*)malloc(sizeof(Job));
 
@@ -57,6 +48,6 @@ void *submit_job(char *job) {
   
   printf("Job # %i arrives at: %i\nmemory required: %i\ndevices requested: %i\nrun time: %i\npriority: %i\n", newJob->job_number,newJob->time_arrival,newJob->memory_required,newJob->devices_required,newJob->run_time, newJob->priority);
 
-  
+  return newJob;
 
 }
