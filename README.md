@@ -1,6 +1,6 @@
 #FILE STRUCTURES & HEADERS:
 
-  - main.c -> include all supporting .h files here... not .c files 
+  - main.c -> include all supporting .h files here... do not include other .c files 
   - [supporting .c file].c -> include this file's .h file here
   - if you create a struct, define the struct in EACH .c file you use it
 
