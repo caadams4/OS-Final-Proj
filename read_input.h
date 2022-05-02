@@ -1,6 +1,5 @@
 typedef struct Event_arrival {
   int time_arrival;
-  char *opString;
   struct Event_arrival *next;
   struct Job *job;
   struct Request_devices *request_devices;
@@ -13,7 +12,7 @@ typedef struct Job {
   int memory_required;
   int devices_required;
   int run_time;
-  char priority;
+  int priority;
   struct Job *next;
 } Job;
 
@@ -34,7 +33,7 @@ void read_input();
 
 int parse_arrival_time(char *job);
 
-Job *submit_job(char *job);
+void submit_job(char *job);
 
 // device request
 Request_devices *device_request(char *device_req);
