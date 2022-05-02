@@ -1,3 +1,9 @@
+#FILE STRUCTURES & HEADERS:
+
+  - main.c -> include all supporting .h files here... not .c files 
+  - [supporting .c file].c -> include this file's .h file here
+  - if you create a struct, define the struct in EACH .c file you use it
+
 #TO COMPILE:
 
 gcc -o a.out [supporting .c file here] [supporting .c file here] main.c
@@ -5,3 +11,6 @@ gcc -o a.out [supporting .c file here] [supporting .c file here] main.c
 #TO RUN:
 
 ./a.out
+
+
+* for help with c file structure and compliation https://courses.cs.washington.edu/courses/cse374/20au/lectures/12-structs-in-c/12-structs-in-c.pdf
