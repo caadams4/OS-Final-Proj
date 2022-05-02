@@ -4,7 +4,7 @@ typedef struct Event_arrival {
   struct Event_arrival *next;
   struct Job *job;
   struct Request_devices *request_devices;
-  struct Release_devices *release_devices
+  struct Release_devices *release_devices;
 } Event_arrival;
 
 typedef struct Job {
@@ -29,11 +29,18 @@ typedef struct Release_devices {
   int devices_released;
 } Release_devices;
 
+
+void read_input();
+
+int parse_arrival_time(char *job);
+
+Job *submit_job(char *job);
+
 // device request
-void device_request(char *device_req);
+Request_devices *device_request(char *device_req);
 
 // release devices
-void release_device(char *release_req);
+Release_devices *release_device(char *release_req);
 
 // configure device
 void sys_config(char *sys_specs);
@@ -41,7 +48,5 @@ void sys_config(char *sys_specs);
 // display status 
 void display_status();
 
-void read_input();
 
 
-Job *submit_job(char *job);
