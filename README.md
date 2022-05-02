@@ -6,11 +6,11 @@
 
 #TO COMPILE:
 
-gcc -o a.out [supporting .c file here] [supporting .c file here] main.c
+  gcc -o a.out [supporting .c file here] [supporting .c file here] main.c
 
 #TO RUN:
 
-./a.out
+  ./a.out
 
 
-* for help with c file structure and compliation https://courses.cs.washington.edu/courses/cse374/20au/lectures/12-structs-in-c/12-structs-in-c.pdf
+For help with c file structure and compliation https://courses.cs.washington.edu/courses/cse374/20au/lectures/12-structs-in-c/12-structs-in-c.pdf
