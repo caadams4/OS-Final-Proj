@@ -35,6 +35,9 @@ void read_input() {
             sys_config(op); // device_mgmt.c
             break;
           case 'A':;  // intentially left a semicolon. Would give an error next line without it
+
+            // Creates a job struct for each job read from input
+            
             Job * job = submit_job(op); // submit_q.c
 
             // TODO send_2_hold_q(job)
