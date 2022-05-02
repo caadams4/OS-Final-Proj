@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "device_mgmt.h"
 
-// device request
+  // request device based on input
 void device_request(char *device_req) {
-
     // Q   
   char *parsed_job = strtok(device_req, " ");
   
@@ -24,10 +24,8 @@ void device_request(char *device_req) {
   printf("Job %i requests %i devices!!!\n", job_number, devices_requested);  
 }
 
-
-// release devices
+  // release device based on input
 void release_device(char *release_req) {
-
     // Q   
   char *parsed_job = strtok(release_req, " ");
   
@@ -46,7 +44,7 @@ void release_device(char *release_req) {
   printf("Job %i releases %i devices!!!\n", job_number, devices_released);
 }
 
-// configure device
+  // configure device based on input
 void sys_config(char *sys_specs) {
 
     // Q   
@@ -71,7 +69,7 @@ void sys_config(char *sys_specs) {
   printf("System configured at %i with %i memory, %i serial devices, and %i time quatnum.\n", time_arrival, main_memory, serial_devices, time_quantum); 
 }
 
-// display status 
+  // display status based on input 
 void display_status() {
 
   puts("system status HERE!!!!!!!!!!!!!!!!!!");
