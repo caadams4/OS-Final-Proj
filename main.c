@@ -2,13 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "header.h"
-#include "submit_q.c"
-#include "device_mgmt.c"
 
+#include "submit_q.h"
+#include "device_mgmt.h"
+//#include "header.h"
+
+void read_input();
+
+typedef struct Job {
+  int time_arrival;
+  int job_number;
+  int memory_required;
+  int devices_required;
+  int run_time;
+  char priority;
+  struct Job *next;
+} Job;
+
+// submit queue
+
+
+// hold queue 1
+
+
+// hold queue 2
 
 int main(void) {
-  read_input();
+  read_input();  
   return 0;
 }
 

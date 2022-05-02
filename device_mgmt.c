@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "device_mgmt.h"
 
 // device request
 void device_request(char *device_req) {

@@ -1,9 +1,3 @@
-// main functions
-void read_input();
-
-// submit_q functions
-void  submit_job(char *job);
-
 // device request
 void device_request(char *device_req);
 
