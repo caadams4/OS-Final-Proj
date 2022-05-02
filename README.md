@@ -1,6 +1,6 @@
 #TO COMPILE:
 
-gcc main.c
+gcc -o [supporting .c file here] [supporting .c file here] main.c
 
 #TO RUN:
 
