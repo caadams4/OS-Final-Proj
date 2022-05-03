@@ -1,11 +1,3 @@
-typedef struct Event_arrival {
-  int time_arrival;
-  struct Event_arrival *next;
-  struct Job *job;
-  struct Request_devices *request_devices;
-  struct Release_devices *release_devices;
-} Event_arrival;
-
 typedef struct Job {
   int time_arrival;
   int job_number;
@@ -28,12 +20,22 @@ typedef struct Release_devices {
   int devices_released;
 } Release_devices;
 
+typedef struct Event_arrival {
+  int time_arrival;
+  struct Event_arrival *next;
+  struct Job *job;
+  struct Request_devices *request_devices;
+  struct Release_devices *release_devices;
+} Event_arrival;
+
+
+
 
 void read_input();
 
 int parse_arrival_time(char *job);
 
-void submit_job(char *job);
+void submit_job(Job *newJob, char *op);
 
 // device request
 Request_devices *device_request(char *device_req);
