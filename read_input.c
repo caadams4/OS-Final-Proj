@@ -24,7 +24,6 @@ Event_arrival *read_input() {
         
         if (event_list_length == 0) { 
           head = newEvent; 
-          //printf("head -> %i",head->time_arrival);
         }
       
         event_list_length++;
