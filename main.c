@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "read_input.h"
 
 
 int start_time = 0;
+
+struct Event_arrival *event_list_head;
 
 // submit queue
 
@@ -17,6 +18,6 @@ int start_time = 0;
 // hold queue 2
 
 int main(void) {
-  read_input();  
+  event_list_head = read_input();  
   return 0;
 }

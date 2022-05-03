@@ -8,56 +8,65 @@ int event_list_length = 0;
 struct Event_arrival *head;
 
 
-void read_input() {
+Event_arrival *read_input() {
   // Read input of input.txt and build tasks and requests
     char op[30];
     char opCopy[30];
     FILE *input = fopen("./input.txt", "r");
-    /* Get each op until there arerm none left */
+    /* Get each op-line until there arerm none left */
     while (fgets(op, 30, input)) {
+      
         strcpy(opCopy,op);
         char opCode = op[0];
         // Build Event_arrival struct
         Event_arrival *newEvent = (Event_arrival*)malloc(sizeof(Event_arrival));
         newEvent->time_arrival = parse_arrival_time(op);
-        printf("%s",opCopy);
+        
         if (event_list_length == 0) { 
           head = newEvent; 
+          //printf("head -> %i",head->time_arrival);
         }
-   
+      
+        event_list_length++;
+      
         switch (opCode){
-          case 'C':
-            //sys_config(op); // device_mgmt.c
+          
+          case 'C':;
+            System_config *system_config = (System_config*)malloc(sizeof(System_config));
+            newEvent->system_config = system_config;
+            sys_config(system_config, opCopy); // device_mgmt.c
             break;
-          case 'A':;  
-            //newEvent->job = submit_job(op); // submit_q.c
-            //submit_job(op); // submit_q.c
-            puts("y mus I cry");
-            //newEvent->job = job;
-//TODO!!!!            add_2_event_list(newEvent);
+          
+          case 'A':; 
             Job *newJob = (Job*)malloc(sizeof(Job));
+            newEvent->job = newJob;
             submit_job(newJob,opCopy);
+            //printf("newEvent->job->priority = %i",newEvent->job->priority);
             break;
+          
           case 'Q':;
-            //newEvent->request_devices = device_request(op); // device_mgmt.c 
-//TODO!!!!            add_2_event_list(newEvent);
+            Request_devices *request_devices = (Request_devices*)malloc(sizeof(Request_devices));
+            device_request(request_devices, opCopy);
+            newEvent->request_devices = request_devices;
             break;
-          /*
+          
           case 'L':;
-            //Release_devices * rel_devices = release_device(op); // device_mgmt.c
-//TODO!!!!            add_2_event_list(newEvent);
+            Release_devices *release_devices = (Release_devices*)malloc(sizeof(Release_devices)); 
+            device_release(release_devices, opCopy);
+            newEvent->release_devices = release_devices;
             break;
-          case 'D':
-            puts("Display Status");
-            printf("%s\n", op);
+              
+          case 'D':;
+            display_status();
             break;
-          */
+          
         }
         if (op[strlen(op) - 1] != '\n')
             printf("\n");
     }
-}
 
+  return head;
+}
 
 
 int parse_arrival_time(char *job) {
@@ -69,122 +78,87 @@ int parse_arrival_time(char *job) {
 }
 
 
-
-
 void submit_job(Job *newJob, char *job) {
+  
   char *parsed_job = strtok(job, " ");
   
-  // int arrival time
-  parsed_job = strtok(NULL, " ");
+  parsed_job = strtok(NULL, " "); // int arrival time
   int time_arrival = atoi(parsed_job);
   newJob->time_arrival = time_arrival;
-
-  // Job number
-  parsed_job = strtok(NULL, " J=");
+  
+  parsed_job = strtok(NULL, " J="); // Job number
   int job_number = atoi(parsed_job);
   newJob->job_number = job_number;
-
-  // mem_required
-  parsed_job = strtok(NULL, " M=");
+  
+  parsed_job = strtok(NULL, " M="); // mem_required
   int memory_required = atoi(parsed_job);
   newJob->memory_required = memory_required;
-    
-  // devices_req
-  parsed_job = strtok(NULL, " S=");
+  
+  parsed_job = strtok(NULL, " S="); // devices_req
   int devices_required = atoi(parsed_job);
   newJob->devices_required = devices_required;
-   
-  // run_time
-  parsed_job = strtok(NULL, " R=");
+  
+  parsed_job = strtok(NULL, " R="); // run_time
   int run_time = atoi(parsed_job);
   newJob->run_time = run_time;
-    
-  // priority
-  parsed_job = strtok(NULL, " P=");
-  int priority = atoi(parsed_job);
-  newJob->priority = priority;
   
-  printf("newJob->priority = %i",newJob->priority);
+  parsed_job = strtok(NULL, " P="); // priority
+  int priority = atoi(parsed_job);
+  newJob->priority = atoi(parsed_job);
 }
 
-
-
   // request device based on input
-Request_devices *device_request(char *device_req) {
-
-  
-  Request_devices *request_devices = (Request_devices*)malloc(sizeof(Request_devices));
-  
-    // Q   
-  char *parsed_input = strtok(device_req, " ");
-  
-    // int arrival time
-  parsed_input = strtok(NULL, " ");
+void device_request(Request_devices *request_devices, char *job) {
+  char *parsed_input = strtok(job, " ");
+    
+  parsed_input = strtok(NULL, " "); // int arrival time
   request_devices->time_arrival = atoi(parsed_input);
-  
-  
-    // Job number
-  parsed_input = strtok(NULL, " J=");
+    
+  parsed_input = strtok(NULL, " J="); // Job number
   request_devices->job_number = atoi(parsed_input);
-  
-    // Number of devices
-  parsed_input = strtok(NULL, " D=");
+    
+  parsed_input = strtok(NULL, " D="); // Number of devices
   request_devices->devices_requested = atoi(parsed_input);
 
-  printf("Job %i requests %i devices!!!\n", request_devices->job_number, request_devices->devices_requested);  
-
-  return request_devices;
 }
 
   // release device based on input
-Release_devices * release_device(char *release_req) {
-
+void device_release(Release_devices *release_devices, char *job) {
+  char *parsed_input = strtok(job, " ");
   
-  Release_devices *release_devices = (Release_devices*)malloc(sizeof(Release_devices));
-  
-    // Q   
-  char *parsed_input = strtok(release_req, " ");
-  
-    // int arrival time
-  parsed_input = strtok(NULL, " ");
+    
+  parsed_input = strtok(NULL, " "); // int arrival time
   release_devices->time_arrival = atoi(parsed_input);
   
-    // Job number
-  parsed_input = strtok(NULL, " J=");
+    
+  parsed_input = strtok(NULL, " J="); // Job number
   release_devices->job_number = atoi(parsed_input);
   
-    // Number of devices
-  parsed_input = strtok(NULL, " D=");
+    
+  parsed_input = strtok(NULL, " D="); // Number of devices
   release_devices->devices_released = atoi(parsed_input);
-
-  printf("Job %i releases %i devices!!!\n", release_devices->job_number, release_devices->devices_released);
-
-  return release_devices;
+  
 }
 
   // configure device based on input
-void sys_config(char *sys_specs) {
-
-    // Q   
+void sys_config(System_config *system_config, char *sys_specs) {
   char *parsed_job = strtok(sys_specs, " ");
   
-    // int arrival time
-  parsed_job = strtok(NULL, " ");
+  parsed_job = strtok(NULL, " "); // int arrival time
   int time_arrival = atoi(parsed_job);
-  
-    // Memory available
-  parsed_job = strtok(NULL, " M=");
+  system_config->time_arrival;
+    
+  parsed_job = strtok(NULL, " M="); // Memory available
   int main_memory = atoi(parsed_job);
+  system_config->memory_available;
   
-    // Serial Devices Availalbe
-  parsed_job = strtok(NULL, " S=");
+  parsed_job = strtok(NULL, " S="); // Serial Devices Availalbe
   int serial_devices = atoi(parsed_job);
+  system_config->serial_devices_available;
   
-    // Time quantum
-  parsed_job = strtok(NULL, " Q=");
+  parsed_job = strtok(NULL, " Q="); // Time quantum
   int time_quantum = atoi(parsed_job);
-
-  printf("System configured at %i with %i memory, %i serial devices, and %i time quatnum.\n", time_arrival, main_memory, serial_devices, time_quantum); 
+  system_config->time_quantum;
 }
 
   // display status based on input 
