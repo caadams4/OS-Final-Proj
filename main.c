@@ -1,62 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
+#include "read_input.h"
 
 
-#include "submit_q.h"
-#include "device_mgmt.h"
+/*
+typedef struct Event_arrival {    ***STRUCTS DEFINIED IN: read_inputs.h***
 
-void read_input();
+  int time_arrival;
 
-// submit queue
+  struct Event_arrival *next;-----------------------------> pointer to next event
 
+  struct Job *job; ----------------------------------\
+  struct Request_devices *request_devices;            \_________ Depending on event type, will point to one of these structs. Others will be null. 
+  struct Release_devices *release_devices;            /
+  struct System_config *system_config; --------------/
 
-// hold queue 1
+} Event_arrival;
+*/ 
 
-
-// hold queue 2
 
 int main(void) {
-  read_input();  
+  int finished = 0;
+  struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
+
+  printf("Time quantum = %i\n",event_list_head->system_config->time_quantum);
+  printf("Memory available = %i\n",event_list_head->system_config->memory_available);
+  printf("Serial devices available = %i\n",event_list_head->system_config->serial_devices_available);
+  
   return 0;
-}
-
-void read_input() {
-  // Read input of input.txt and build tasks and requests
-    char op[30];
-    // open input file
-    FILE *input = fopen("./input.txt", "r");
-    /* Get each op until there are none left */
-    while (fgets(op, 30, input)) {
-        char opCode = op[0];
-      
-        switch (opCode){
-          case 'C':
-            sys_config(op); // device_mgmt.c
-            break;
-          case 'A':;  // intentially left a semicolon. Would give an error next line without it
-
-            // Creates a job struct for each job read from input
-            
-            Job * job = submit_job(op); // submit_q.c
-
-            // TODO send_2_hold_q(job)
-                // Will add job node to linked list of HQ1 or HQ2 based on priority
-            
-            break;
-          case 'Q':
-            device_request(op); // device_mgmt.c 
-            break;
-          case 'L':
-            release_device(op); // device_mgmt.c
-            break;
-          case 'D':
-            puts("Display Status");
-            printf("%s\n", op);
-            break;
-          
-        }
-        if (op[strlen(op) - 1] != '\n')
-            printf("\n");
-    }
 }
