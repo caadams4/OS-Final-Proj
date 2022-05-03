@@ -61,5 +61,4 @@ void sys_config(System_config *system_config, char *sys_specs);
 // display status 
 void display_status();
 
-
-
+Event_arrival *add_event_to_end(struct Event_arrival* head);
