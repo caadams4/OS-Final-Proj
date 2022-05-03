@@ -6,8 +6,7 @@ typedef struct Job {
   int run_time;
   int priority;
   struct Job *next;
-} Job;
-
+} Job
 
 typedef struct Request_devices {
   int time_arrival;
@@ -15,13 +14,11 @@ typedef struct Request_devices {
   int devices_requested;
 } Request_devices;
 
-
 typedef struct Release_devices {
   int time_arrival;
   int job_number;
   int devices_released;
 } Release_devices;
-
 
 typedef struct System_config {
   int time_arrival;
