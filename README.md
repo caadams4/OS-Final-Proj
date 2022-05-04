@@ -2,7 +2,7 @@
 
   - main.c -> include all supporting .h files here... do not include other .c files 
   - [supporting .c file].c -> include this file's .h file here
-  - if you create a struct, define the struct in the .h file you create it
+  - if you create a struct, define the struct in the .h file you use it
 
 #TO COMPILE:
 
