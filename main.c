@@ -26,9 +26,11 @@ int main(void) {
   int finished = 0;
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
 
-  printf("Time quantum = %i\n",event_list_head->system_config->time_quantum);
-  printf("Memory available = %i\n",event_list_head->system_config->memory_available);
-  printf("Serial devices available = %i\n",event_list_head->system_config->serial_devices_available);
+  while (event_list_head->next != NULL) { // successfully iterates through each event!
+    printf("Time arrival = %i\n",event_list_head->time_arrival);
+    event_list_head = event_list_head->next;
+  }
+
   
   return 0;
 }
