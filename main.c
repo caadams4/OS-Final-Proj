@@ -24,7 +24,7 @@ typedef struct Event_arrival {    ***STRUCTS DEFINIED IN: read_inputs.h***
 
 /*
 
-Write a file to conduct operations on linked list: Add node, remove node 
+Write a file to conduct operations on linked list: Add node (sorted), Add node (unsorted), remove node 
 
 */
 
