@@ -43,15 +43,12 @@ Event_arrival *read_input() {
         case 'C':;
           System_config *system_config = (System_config*)malloc(sizeof(System_config));
           newEvent->system_config = system_config;
-          sys_config(system_config, opCopy); // device_mgmt.c
-          
-          puts("CONFIGGING!!!!!");
+          sys_config(system_config, opCopy); 
           break;          
         case 'A':; 
           Job *newJob = (Job*)malloc(sizeof(Job));
           newEvent->job = newJob;
           submit_job(newJob,opCopy);
-          //printf("newEvent->job->priority = %i",newEvent->job->priority);
           break;
           
         case 'Q':;
@@ -67,12 +64,10 @@ Event_arrival *read_input() {
           break;
               
         case 'D':;
-          display_status();
+
           break;
       }
       
-      if (op[strlen(op) - 1] != '\n')
-          printf("\n");
   }
 
   return head;

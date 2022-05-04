@@ -35,9 +35,25 @@ Write a file to conduct operations on linked list: Add node (sorted), Add node (
 int main(void) {
   int finished = 0;
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
+  
+  struct System_config *system_config = event_list_head->system_config;
+
 
   while (event_list_head->next != NULL) { // successfully iterates through each event!
-    printf("Time arrival = %i\n",event_list_head->time_arrival);
+    
+    if (event_list_head->job) {
+      if (event_list_head->job->memory_required > system_config->memory_available) {
+        printf("Rejecting job number %i\n\n",event_list_head->job->job_number);
+      } else {
+        printf("Inducting job number %i\n\n",event_list_head->job->job_number);
+      }
+    } else if (event_list_head->request_devices) {
+      printf("Request %i devices for job %i\n\n",event_list_head->request_devices->devices_requested,event_list_head->request_devices->job_number);
+    } else if (event_list_head->release_devices) {
+      printf("Release %i devices from job %i\n\n",event_list_head->release_devices->devices_released,event_list_head->release_devices->job_number);
+    }
+
+
     event_list_head = event_list_head->next;
   }
 
