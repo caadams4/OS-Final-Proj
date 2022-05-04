@@ -4,7 +4,7 @@
 #include <time.h>
 
 #include "read_input.h"
-
+#include "linked_list.h"
 
 /*
 typedef struct Event_arrival {    ***STRUCTS DEFINIED IN: read_inputs.h***
@@ -29,24 +29,34 @@ Write a file to conduct operations on linked list: Add node (sorted), Add node (
 */
 
 
-
-
-
 int main(void) {
   int finished = 0;
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
-  
+  struct Job *hold_q_1_head = NULL;
+  struct Job *hold_q_2_head = NULL;
+
   struct System_config *system_config = event_list_head->system_config;
 
 
   while (event_list_head->next != NULL) { // successfully iterates through each event!
     
     if (event_list_head->job) {
+
+
       if (event_list_head->job->memory_required > system_config->memory_available) {
+
         printf("Rejecting job number %i\n\n",event_list_head->job->job_number);
+
       } else {
+
         printf("Inducting job number %i\n\n",event_list_head->job->job_number);
+
+        induct_process(hold_q_1_head, hold_q_2_head, event_list_head->job);
+
       }
+
+
+
     } else if (event_list_head->request_devices) {
       printf("Request %i devices for job %i\n\n",event_list_head->request_devices->devices_requested,event_list_head->request_devices->job_number);
     } else if (event_list_head->release_devices) {
@@ -60,3 +70,4 @@ int main(void) {
   
   return 0;
 }
+
