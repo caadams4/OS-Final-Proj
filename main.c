@@ -22,6 +22,16 @@ typedef struct Event_arrival {    ***STRUCTS DEFINIED IN: read_inputs.h***
 */ 
 
 
+/*
+
+Write a file to conduct operations on linked list: Add node, remove node 
+
+*/
+
+
+
+
+
 int main(void) {
   int finished = 0;
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event

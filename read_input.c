@@ -92,27 +92,21 @@ void submit_job(Job *newJob, char *job) {
   char *parsed_job = strtok(job, " ");
   
   parsed_job = strtok(NULL, " "); // int arrival time
-  int time_arrival = atoi(parsed_job);
-  newJob->time_arrival = time_arrival;
+  newJob->time_arrival = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " J="); // Job number
-  int job_number = atoi(parsed_job);
-  newJob->job_number = job_number;
+  newJob->job_number = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " M="); // mem_required
-  int memory_required = atoi(parsed_job);
-  newJob->memory_required = memory_required;
+  newJob->memory_required = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " S="); // devices_req
-  int devices_required = atoi(parsed_job);
-  newJob->devices_required = devices_required;
-  
+  newJob->devices_required = atoi(parsed_job);
+
   parsed_job = strtok(NULL, " R="); // run_time
-  int run_time = atoi(parsed_job);
-  newJob->run_time = run_time;
+  newJob->run_time = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " P="); // priority
-  int priority = atoi(parsed_job);
   newJob->priority = atoi(parsed_job);
 }
 
@@ -153,20 +147,16 @@ void sys_config(System_config *system_config, char *sys_specs) {
   char *parsed_job = strtok(sys_specs, " ");
   
   parsed_job = strtok(NULL, " "); // int arrival time
-  int time_arrival = atoi(parsed_job);
-  system_config->time_arrival = time_arrival;
+  system_config->time_arrival = atoi(parsed_job);
     
   parsed_job = strtok(NULL, " M="); // Memory available
-  int main_memory = atoi(parsed_job);
-  system_config->memory_available = main_memory;
+  system_config->memory_available = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " S="); // Serial Devices Availalbe
-  int serial_devices = atoi(parsed_job);
-  system_config->serial_devices_available = serial_devices;
+  system_config->serial_devices_available = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " Q="); // Time quantum
-  int time_quantum = atoi(parsed_job);
-  system_config->time_quantum = time_quantum;
+  system_config->time_quantum = atoi(parsed_job);
 }
 
   // display status based on input 
