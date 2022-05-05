@@ -22,12 +22,6 @@ typedef struct Event_arrival {    ***STRUCTS DEFINIED IN: read_inputs.h***
 */ 
 
 
-/*
-
-Write a file to conduct operations on linked list: Add node (sorted), Add node (unsorted), remove node 
-
-*/
-
 
 int main(void) {
   int finished = 0;
@@ -70,20 +64,21 @@ int main(void) {
     event_list_head = event_list_head->next;
   }
 
-  // Print HQ2s
 
   while (hold_q_2_head != NULL) {
 
-    printf("HQ2: %p\n",hold_q_2_head);
+    printf("FIFO Queue (hold Q 2): %i\n",hold_q_2_head->run_time);
     hold_q_2_head = hold_q_2_head->next;  // iterates through entire hold queue 2. sorted
                                           // fifo. head was first in. last is last out
   }
 
-    while (hold_q_1_head != NULL) {
+  puts("\n");
+  
+  while (hold_q_1_head != NULL) {
 
-    printf("HQ1: %i\n",hold_q_1_head->run_time);
+    printf("SJF Queue (hold Q 1): %i\n",hold_q_1_head->run_time);
     hold_q_1_head = hold_q_1_head->next;  // iterates through entire hold queue 2. sorted
-                                          // fifo. head was first in. last is last out
+                                          // sjf. head is shortest job, tail is longest
   }
 
   return 0;
