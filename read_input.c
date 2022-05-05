@@ -6,10 +6,9 @@
 
 int event_list_length = 0;
 
-
-
 Event_arrival *read_input() {
   // Read input of input.txt and build tasks and requests
+  // Will return pointer to the first event (head)
     struct Event_arrival* head = NULL;
     char op[30];
     char opCopy[30];
@@ -17,15 +16,14 @@ Event_arrival *read_input() {
 
     /* Get each op-line until there arerm none left */
   
-    while (fgets(op, 30, input)) {
+    while (fgets(op, 30, input)) { // iterates through each line of input
       
       strcpy(opCopy,op);
       char opCode = op[0];
-      // Build Event_arrival struct
         
-      Event_arrival *newEvent = add_event_to_end(head);
+      Event_arrival *newEvent = add_event_to_end(head); 
         
-      if (event_list_length == 0){
+      if (event_list_length == 0){  // if no events, make this event the head the head
         head = newEvent;
       }       
        
@@ -38,7 +36,7 @@ Event_arrival *read_input() {
       
       event_list_length++;
       
-      switch (opCode){
+      switch (opCode){  // calls to configure event based on opCode from input
           
         case 'C':;
           System_config *system_config = (System_config*)malloc(sizeof(System_config));
@@ -75,6 +73,8 @@ Event_arrival *read_input() {
 
 
 int parse_arrival_time(char *job) {
+  // parses arrival time for each event. This is to know when to induct the event in the driving code
+
   Job *newJob = (Job*)malloc(sizeof(Job));
   char *parsed_job = strtok(job, " ");
   parsed_job = strtok(NULL, " ");
@@ -84,6 +84,8 @@ int parse_arrival_time(char *job) {
 
 
 void submit_job(Job *newJob, char *job) {
+  // configures job 
+
   char *parsed_job = strtok(job, " ");
   
   parsed_job = strtok(NULL, " "); // int arrival time
@@ -109,6 +111,8 @@ void submit_job(Job *newJob, char *job) {
 
   // request device based on input
 void device_request(Request_devices *request_devices, char *job) {
+  // configures request devices event
+
   char *parsed_input = strtok(job, " ");
     
   parsed_input = strtok(NULL, " "); // int arrival time
@@ -124,6 +128,8 @@ void device_request(Request_devices *request_devices, char *job) {
 
   // release device based on input
 void device_release(Release_devices *release_devices, char *job) {
+  // configures release devices event
+
   char *parsed_input = strtok(job, " ");
     
   parsed_input = strtok(NULL, " "); // int arrival time
@@ -138,6 +144,8 @@ void device_release(Release_devices *release_devices, char *job) {
 
   // configure device based on input
 void sys_config(System_config *system_config, char *sys_specs) {
+  // configures system_config struct with mem, devices, time quantum
+
   printf("%s",sys_specs);
   char *parsed_job = strtok(sys_specs, " ");
   
@@ -162,18 +170,21 @@ void display_status() {
 }
 
 Event_arrival *add_event_to_end(struct Event_arrival* head) {
-    Event_arrival *newEvent = (struct Event_arrival*)malloc(sizeof(struct Event_arrival));
+    // takes in pointer to the head of the linked list
+    // returns pointer to the added newEvent
+    Event_arrival *newEvent = (struct Event_arrival*)malloc(sizeof(struct Event_arrival)); // malloc new struct
 
-    struct Event_arrival *last = head;  
+    struct Event_arrival *last = head; 
 
     if (head == NULL) {
        head = newEvent;
        return newEvent;
     }
   
-    while (last->next != NULL)
-        last = last->next;
-  
+    while (last->next != NULL) { // iterates to the last element and appends the newEvent to the linked list
+        last = last->next;       // of events
+    }
+
     last->next = newEvent;
-    return newEvent;
+    return newEvent;  
 }
