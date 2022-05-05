@@ -59,3 +59,14 @@ void sys_config(System_config *system_config, char *sys_specs);
 void display_status();
 
 Event_arrival *add_event_to_end(struct Event_arrival* head);
+
+
+// --------------------- Fucntion Prototypes for linked_list.c -------------------- //
+
+struct Job *induct_process(struct Job *hold_q_1_head, struct Job *hold_q_2_head, struct Job *job);
+
+struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job);
+
+struct Job *send_to_h_q_2(struct Job *hold_q_2_head, struct Job *job);
+
+struct Job *compare_job_lengths(struct Job *incoming_job, struct Job *this_job, struct Job *next_job);
