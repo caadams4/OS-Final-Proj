@@ -74,9 +74,15 @@ int main(void) {
 
   while (hold_q_2_head != NULL) {
 
-    puts("123");
     printf("HQ2: %p\n",hold_q_2_head);
     hold_q_2_head = hold_q_2_head->next;  // iterates through entire hold queue 2. sorted
+                                          // fifo. head was first in. last is last out
+  }
+
+    while (hold_q_1_head != NULL) {
+
+    printf("HQ1: %i\n",hold_q_1_head->run_time);
+    hold_q_1_head = hold_q_1_head->next;  // iterates through entire hold queue 2. sorted
                                           // fifo. head was first in. last is last out
   }
 
