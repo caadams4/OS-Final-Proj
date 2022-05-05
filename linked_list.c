@@ -2,22 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "linked_list.h"
-
-
-
-void induct_process(struct Job *hold_q_1_head, struct Job *hold_q_2_head, struct Job *job) {
-    if (job->priority == 1) {
-        send_to_h_q_1(hold_q_1_head, job);
-    } else {
-        send_to_h_q_2(hold_q_2_head, job);
-    }
-}
+#include "read_input.h"
 
 
 // add a node
 
-void send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
+struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
     // SJF
     if (hold_q_1_head == NULL) {
         hold_q_1_head = job;
@@ -31,14 +21,17 @@ void send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
     }
 }
 
-void send_to_h_q_2(struct Job *hold_q_2_head, struct Job *job) {
+struct Job *send_to_h_q_2(struct Job *hold_q_2_head, struct Job *job) {
     // SJF
     if (hold_q_2_head == NULL) {
         hold_q_2_head = job;
+        printf("HQ2 head: %p\n\n",hold_q_2_head);
     } else {
-        while (hold_q_2_head->next != NULL) {
-            hold_q_2_head = hold_q_2_head->next;
+        struct Job *tmp_hold_q_2_head = hold_q_2_head;
+        while (tmp_hold_q_2_head->next != NULL) {
+            tmp_hold_q_2_head = hold_q_2_head->next;
         }
-        hold_q_2_head->next = job; // add Job to end of the Hold Queue 2 list
+        tmp_hold_q_2_head->next = job; // add Job to end of the Hold Queue 2 list
     }
+    return hold_q_2_head;
 }
