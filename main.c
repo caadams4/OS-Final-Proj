@@ -5,7 +5,7 @@
 #include <math.h>
 
 #include "read_input.h" // ** all functions and structs protyped in read_input.h
-
+//#include "system_status.h"
 
 
 /*
@@ -33,8 +33,7 @@ int main(void) {
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
   struct Job *hold_q_1_head = NULL;
   struct Job *hold_q_2_head = NULL;
-
-  struct System_config *system_config = event_list_head->system_config; // creates a struct system config
+  struct System_status *system_status = configure_system(event_list_head->sys_config); // creates a struct system config
 
   start_t = clock();
 
