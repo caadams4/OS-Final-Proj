@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #include "read_input.h" // ** all functions and structs protyped in read_input.h
 
@@ -40,9 +41,8 @@ int main(void) {
 
   while (event_list_head->next != NULL) { // iterates through each event!
 
-    time_counter = clock()/1000000;
-    printf("Time: %i", time_counter);
-        
+    time_counter = floor(clock()/1000000);
+
     if (time_counter == event_list_head->time_arrival) {
     
 
