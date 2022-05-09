@@ -28,7 +28,7 @@ typedef struct Event_arrival {
 
 int main(void) {
   clock_t start_t, end_t, total_t;
-  long time_counter;
+  int clock_to_seconds = 0, time_ticker;
   int finished = 0;
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
   struct Job *hold_q_1_head = NULL;
@@ -37,16 +37,16 @@ int main(void) {
   struct System_config *system_config = event_list_head->system_config; // creates a struct system config
 
   start_t = clock();
-  printf("%l",start_t);
 
   while (event_list_head->next != NULL) { // iterates through each event!
 
-    time_counter = clock()%1000000;
-    if (time_counter == 0) {
-      puts("yo");
+    time_ticker = clock()%1000000;
+    if (time_ticker == 0) {
+      clock_to_seconds++;
+      printf("Time: %i\n",clock_to_seconds);
     }
 
-    if (time_counter == event_list_head->time_arrival) {
+    if (clock_to_seconds == event_list_head->time_arrival) {
     
 
     if (event_list_head->job) {
@@ -92,7 +92,7 @@ int main(void) {
                                           // sjf. head is shortest job, tail is longest
   }
   
-  printf("\n\nTotal time: %i\n", time_counter);
+  printf("\n\nTotal time: %i\n", clock_to_seconds);
   end_t = clock();
   printf("Total cycles: %li\n", end_t);
   return 0;
