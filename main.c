@@ -41,7 +41,10 @@ int main(void) {
 
   while (event_list_head->next != NULL) { // iterates through each event!
 
-    time_counter = floor(clock()/1000000);
+    time_counter = clock()%1000000;
+    if (time_counter == 0) {
+      puts("yo");
+    }
 
     if (time_counter == event_list_head->time_arrival) {
     
