@@ -41,7 +41,8 @@ int main(void) {
   while (event_list_head->next != NULL) { // iterates through each event!
 
     time_counter = clock()/1000000;
-    
+    printf("Time: %i", time_counter);
+        
     if (time_counter == event_list_head->time_arrival) {
     
 
