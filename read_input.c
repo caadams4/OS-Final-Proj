@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "read_input.h"
+#include "prototypes.h"
 
 int event_list_length = 0;
 
@@ -32,16 +32,16 @@ Event_arrival *read_input() {
       newEvent->job = NULL;
       newEvent->request_devices = NULL;
       newEvent->release_devices = NULL;
-      newEvent->system_config = NULL;
+      newEvent->system_status = NULL;
       
       event_list_length++;
       
       switch (opCode){  // calls to configure event based on opCode from input
           
         case 'C':;
-          System_config *system_config = (System_config*)malloc(sizeof(System_config));
-          newEvent->system_config = system_config;
-          sys_config(system_config, opCopy); 
+          System_status *system_status = malloc(sizeof(system_status));
+          newEvent->system_status = system_status;
+          sys_config(system_status, opCopy); 
           break;          
         case 'A':; 
           Job *newJob = (Job*)malloc(sizeof(Job));
@@ -114,7 +114,8 @@ void device_request(Request_devices *request_devices, char *job) {
   // configures request devices event
 
   char *parsed_input = strtok(job, " ");
-    
+  request_devices->next == NULL;
+  
   parsed_input = strtok(NULL, " "); // int arrival time
   request_devices->time_arrival = atoi(parsed_input);
     
@@ -131,7 +132,8 @@ void device_release(Release_devices *release_devices, char *job) {
   // configures release devices event
 
   char *parsed_input = strtok(job, " ");
-    
+  release_devices->next == NULL;
+  
   parsed_input = strtok(NULL, " "); // int arrival time
   release_devices->time_arrival = atoi(parsed_input);
     
@@ -143,23 +145,22 @@ void device_release(Release_devices *release_devices, char *job) {
 }
 
   // configure device based on input
-void sys_config(System_config *system_config, char *sys_specs) {
-  // configures system_config struct with mem, devices, time quantum
+void sys_config(System_status *system_status, char *sys_specs) {
+  // configures system_status struct with mem, devices, time quantum
 
   printf("%s",sys_specs);
   char *parsed_job = strtok(sys_specs, " ");
   
   parsed_job = strtok(NULL, " "); // int arrival time
-  system_config->time_arrival = atoi(parsed_job);
     
   parsed_job = strtok(NULL, " M="); // Memory available
-  system_config->memory_available = atoi(parsed_job);
+  system_status->memory_available = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " S="); // Serial Devices Availalbe
-  system_config->serial_devices_available = atoi(parsed_job);
+  system_status->serial_devices_available = atoi(parsed_job);
   
   parsed_job = strtok(NULL, " Q="); // Time quantum
-  system_config->time_quantum = atoi(parsed_job);
+  system_status->time_quantum = atoi(parsed_job);
 }
 
   // display status based on input 
