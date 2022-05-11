@@ -29,7 +29,8 @@ typedef struct System_status {
 } System_status;
 
 typedef struct Event_arrival {
-  int time_arrival;
+  int time_arrival;  
+  int display_status;
   struct Event_arrival *next;
   struct Job *job;
   struct Request_devices *request_devices;
@@ -76,3 +77,21 @@ struct Job *compare_job_lengths(struct Job *incoming_job, struct Job *this_job, 
 struct Request_devices *send_to_requests(struct Request_devices *request_device_head, struct Request_devices *req);
 
 struct Release_devices *send_to_releases(struct Release_devices *release_device_head, struct Release_devices *req);
+
+// --------------------- Fucntion Prototypes for system_status.c -------------------- //
+
+
+void print_system_status(void);
+
+void print_system_resources(void);
+
+void print_process_table(void);
+
+void print_hold_queues(void);
+
+void print_ready_queue(void);
+
+void print_process_on_CPU(void);
+
+void print_wait_queue(void);
+

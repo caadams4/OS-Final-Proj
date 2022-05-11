@@ -29,6 +29,7 @@ Event_arrival *read_input() {
        
       newEvent->time_arrival = parse_arrival_time(op);
       newEvent->next = NULL;
+      newEvent->display_status = 0;
       newEvent->job = NULL;
       newEvent->request_devices = NULL;
       newEvent->release_devices = NULL;
@@ -62,7 +63,8 @@ Event_arrival *read_input() {
           break;
               
         case 'D':;
-
+          newEvent->display_status = 1;
+          printf("%i event status %i",newEvent->time_arrival,newEvent->display_status);
           break;
       }
       
