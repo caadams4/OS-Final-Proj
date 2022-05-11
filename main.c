@@ -11,9 +11,10 @@
 typedef struct Event_arrival {    
 
   int time_arrival;
+  int display_status;
 
   struct Event_arrival *next;-----------------------------> pointer to next event
-      
+  
                     ------------------------------ \
   struct Job *job;                                  \
   struct Request_devices *request_devices;           \_________ Depending on event type, will point to one of these structs. Others will be null. 
@@ -39,7 +40,7 @@ int main(void) {
 
   start_t = clock();
 
-  while (event_list_head->next != NULL) { // iterates through each event!
+  while (event_list_head != NULL) { // iterates through each event!
 
     //time_ticker = clock()%1000000;
     time_ticker = clock()%1000;
@@ -75,6 +76,8 @@ int main(void) {
         request_device_head = send_to_requests(request_device_head, event_list_head->request_devices);
       } else if (event_list_head->release_devices) {  // TODO Device release
         release_device_head = send_to_releases(release_device_head, event_list_head->release_devices);
+      } else if (event_list_head->display_status == 1) {
+        print_system_status();
       }
 
     event_list_head = event_list_head->next;  // iterator changes to next evet for while loop
