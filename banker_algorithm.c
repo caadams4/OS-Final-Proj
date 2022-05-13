@@ -1,11 +1,8 @@
 // Banker's Algorithm
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "prototypes.h"
 int p_count;
 
-void banker(struct Job *job, struct Request_devices *dev_req, struct Release_devices *dev_rel, struct System_status *sys_status)
+int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devices *dev_rel, struct System_status *sys_status)
 {	
 	int process = job->job_number;
 	int available_resources = sys_status->memory_available;
@@ -98,7 +95,7 @@ int available[available_resources];
       printf("This sequence is safe\n");
       for (i = 0; i < process - 1; i++)
         printf(" P%d ->", ans[i]);
-      printf(" P%d", ans[process - 1]);
+      printf(" P%d\n", ans[process - 1]);
     }
-
+return 0;
 }

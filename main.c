@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <math.h>
-
 #include "prototypes.h" // ** all functions and structs protyped in protopytes.h
 
 
@@ -46,20 +40,30 @@ int main(void) {
     time_ticker = clock()%1000;
     if (time_ticker == 0) {
       clock_to_seconds++;
-      printf("Time: %i\n",clock_to_seconds);
+      //printf("Time: %i\n",clock_to_seconds);    -- commented it out to reduce output
     }
 
     if (clock_to_seconds == event_list_head->time_arrival) {
 
       if (event_list_head->job) {
         struct Job *job = event_list_head->job;
+
+      //Not sure if this is the right place for this
+      banker(job, request_device_head, release_device_head, system_status);
+
+        
         if (job->memory_required > max_memory && job->devices_required > max_devices) {
           printf("Rejecting job number %i\n\n",job->job_number); // reject event -- requires too much memory
         } else {
 
+
+
           if (job->memory_required < system_status->memory_available) {
             printf("Inducting job with priority %i at time: %i\n\n",job->priority, job->time_arrival);
             // TODO Enough available memory? send to ready queue
+            
+
+
 
           } else {
             printf("Sending job with priority %i to hold queue at time: %i\n\n",job->priority, job->time_arrival);
@@ -94,6 +98,8 @@ int main(void) {
   printf("\n\nTotal time: %i\n", clock_to_seconds);
   end_t = clock();
   printf("Total cycles: %li\n", end_t);
+
+
   return 0;
 }
 
