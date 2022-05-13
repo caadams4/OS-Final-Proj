@@ -31,6 +31,7 @@ typedef struct System_status {
   int memory_available;
   int serial_devices_available;
   int time_quantum;
+  struct Job *whos_on_the_cpu;
 } System_status;
 
 typedef struct Event_arrival {
@@ -82,6 +83,8 @@ struct Job *compare_job_lengths(struct Job *incoming_job, struct Job *this_job, 
 struct Request_devices *send_to_requests(struct Request_devices *request_device_head, struct Request_devices *req);
 
 struct Release_devices *send_to_releases(struct Release_devices *release_device_head, struct Release_devices *req);
+
+struct Job *send_to_read_q(struct Job *job, struct Job *req);
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 

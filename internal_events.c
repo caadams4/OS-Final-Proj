@@ -29,3 +29,17 @@ struct Release_devices *send_to_releases(struct Release_devices *release_device_
     return release_device_head;
 }
 
+
+struct Job *send_to_read_q(struct Job *job, struct Job *req) {
+    // SJF
+    if (job == NULL) {
+        job = req;
+    } else {
+        struct Job *tmp_job = job;
+        while (tmp_job->next != NULL) {    //hold_q_1_head->next removed
+            tmp_job = tmp_job->next;
+        }
+        tmp_job->next = req; // add req to end of the Hold Queue 2 list
+    }
+    return job;
+}
