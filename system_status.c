@@ -20,11 +20,10 @@ void add_to_process_table(struct System_status *system_status) {
     int* new_table[system_status->number_processes];
     for (int i = 0;i<system_status->number_processes;i++) new_table[i] = (int*)malloc(6*sizeof(int));
     if (system_status->process_table != NULL) {
-        int *old_table[1][6]= system_status->process_table;
         
         for (int i = 0;i<system_status->number_processes-1;i++){
             for (int j = 0;j<6;j++) {
-                new_table[i][j] = old_table[i][j];
+                new_table[i][j] = system_status->process_table[i][j];
             }
         free(system_status->process_table);
     }
