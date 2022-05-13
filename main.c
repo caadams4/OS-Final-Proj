@@ -1,6 +1,5 @@
 #include "prototypes.h" // ** all functions and structs protyped in protopytes.h
 
-
 /*
 typedef struct Event_arrival {    
 
@@ -17,6 +16,16 @@ typedef struct Event_arrival {
                     -------------------------------/
 } Event_arrival;
 */ 
+
+/*
+           _____________________PROCESS TABLE_____________________________
+  index   |   [0]     [1]      [2]        [3]        [4]         [5]      |
+  data    |   pid   runtime   memory    devices   timestart   timefinish  |
+  example |    1      5         3          4          1           6       |
+  example |    2      5         3          4          6           11      |
+          |_______________________________________________________________|
+*/
+
 
 
 int main(void) {
@@ -35,30 +44,37 @@ int main(void) {
   max_memory = system_status->memory_available;
 
 
-
+  int time_interval;
   start_t = clock();
 
   while (event_list_head != NULL) { // iterates through each event!
 
     //time_ticker = clock()%1000000;
     time_ticker = clock()%1000;
+    time_interval = 0;
     if (time_ticker == 0) {
+      time_interval = 1;
       clock_to_seconds++;
       //printf("Time: %i\n",clock_to_seconds);    -- commented it out to reduce output
     }
 
     /* --------- CPU ----------- */
 
-    if (system_status->whos_on_the_cpu) {
-      if (system_status->whos_on_the_cpu->run_time > 0) {
+    if (system_status->whos_on_the_cpu && time_interval == 1) {
+      if (request_device_head != NULL){ // process internal event ( device request )
+        puts("make request");
+        // TODO process device request
+        release_device_head == NULL;
 
-        // check ineternal events
-
+      } else if(system_status->whos_on_the_cpu->run_time > 0) {
         system_status->whos_on_the_cpu->run_time -= 1;
+      } else { // runtime = 0, 
+        //  move job to other queue
+        // bring on next job
+        printf("FINISHED JOB %i", system_status->whos_on_the_cpu->job_number);
+        system_status->whos_on_the_cpu = ready_q_head;
       }
     }
-
-
 
     /* --------- Internal events ----------- */
 
@@ -86,6 +102,8 @@ int main(void) {
           if (job->memory_required < system_status->memory_available) {
             printf("Inducting job with priority %i at time: %i\n\n",job->priority, job->time_arrival);
             // TODO Enough available memory? send to ready queue
+            system_status->number_processes += 1;
+            //system_status->process_
 
             system_status->memory_available -= job->memory_required;
             ready_q_head = send_to_read_q(ready_q_head,job);

@@ -31,7 +31,9 @@ typedef struct System_status {
   int memory_available;
   int serial_devices_available;
   int time_quantum;
+  int number_processes;
   struct Job *whos_on_the_cpu;
+  int *process_table[];
 } System_status;
 
 typedef struct Event_arrival {
@@ -88,6 +90,7 @@ struct Job *send_to_read_q(struct Job *job, struct Job *req);
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
+void add_to_process_table(struct System_status *system_status);
 
 void print_system_status(void);
 

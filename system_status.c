@@ -13,9 +13,34 @@ void print_system_status() {
 
     print_process_on_CPU();
     print_wait_queue();
-   
-
 }
+
+
+void add_to_process_table(struct System_status *system_status) {
+    int* new_table[system_status->number_processes];
+    for (int i = 0;i<system_status->number_processes;i++) new_table[i] = (int*)malloc(6*sizeof(int));
+    if (system_status->process_table != NULL) {
+        int *old_table[1][6]= system_status->process_table;
+        
+        for (int i = 0;i<system_status->number_processes-1;i++){
+            for (int j = 0;j<6;j++) {
+                new_table[i][j] = old_table[i][j];
+            }
+        free(system_status->process_table);
+    }
+
+    new_table[system_status->number_processes-1][0] = system_status->whos_on_the_cpu->job_number;
+    new_table[system_status->number_processes-1][1] = system_status->whos_on_the_cpu->run_time;
+    new_table[system_status->number_processes-1][2] = system_status->whos_on_the_cpu->memory_required;
+    new_table[system_status->number_processes-1][3] = system_status->whos_on_the_cpu->devices_required;
+    new_table[system_status->number_processes-1][4] = 0;
+    new_table[system_status->number_processes-1][5] = 0;
+    }
+
+    
+    puts("y");
+}
+
 
 
 void print_system_resources() {
@@ -91,4 +116,6 @@ void print_wait_queue(){
     printf("  %i           %i          %i\n");
     */
 }
+
+
 
