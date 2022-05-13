@@ -26,11 +26,15 @@ int main(void) {
   struct Event_arrival *event_list_head = read_input(); // builds a linked list of event
   struct Job *hold_q_1_head = NULL;
   struct Job *hold_q_2_head = NULL;
+  struct Job *ready_q_head = NULL;
+  struct Job *wait_q = NULL;
   struct Request_devices *request_device_head = NULL;
   struct Release_devices *release_device_head = NULL;
   struct System_status *system_status = event_list_head->system_status; // creates a struct system config
   max_devices = system_status->serial_devices_available;
   max_memory = system_status->memory_available;
+
+
 
   start_t = clock();
 
@@ -42,6 +46,27 @@ int main(void) {
       clock_to_seconds++;
       //printf("Time: %i\n",clock_to_seconds);    -- commented it out to reduce output
     }
+
+    /* --------- CPU ----------- */
+
+    if (system_status->whos_on_the_cpu) {
+      if (system_status->whos_on_the_cpu->run_time > 0) {
+
+        // check ineternal events
+
+        system_status->whos_on_the_cpu->run_time -= 1;
+      }
+    }
+
+
+
+    /* --------- Internal events ----------- */
+
+
+
+
+
+    /* --------- External events ----------- */
 
     if (clock_to_seconds == event_list_head->time_arrival) {
 
@@ -61,10 +86,10 @@ int main(void) {
           if (job->memory_required < system_status->memory_available) {
             printf("Inducting job with priority %i at time: %i\n\n",job->priority, job->time_arrival);
             // TODO Enough available memory? send to ready queue
+
+            system_status->memory_available -= job->memory_required;
+            ready_q_head = send_to_read_q(ready_q_head,job);
             
-
-
-
           } else {
             printf("Sending job with priority %i to hold queue at time: %i\n\n",job->priority, job->time_arrival);
             if (event_list_head->job->priority == 1) {
@@ -86,6 +111,9 @@ int main(void) {
 
     event_list_head = event_list_head->next;  // iterator changes to next evet for while loop
     }
+
+  system_status->whos_on_the_cpu = ready_q_head;
+
   }
   while (hold_q_2_head != NULL) {   // prints Hold queue 2 contents
     printf("FIFO Queue (hold Q 2) Runtime: %i - Job No. %i\n",hold_q_2_head->run_time,hold_q_2_head->job_number);
@@ -95,6 +123,13 @@ int main(void) {
     printf("SJF Queue (hold Q 1) Runtime: %i - Job No. %i\n",hold_q_1_head->run_time,hold_q_1_head->job_number);
     hold_q_1_head = hold_q_1_head->next;  // iterates through entire hold queue 2. sorted
   }                 
+  while (ready_q_head != NULL){
+    printf("Ready queue Runtime: %i - Job No. %i\n",ready_q_head->run_time,ready_q_head->job_number);
+    ready_q_head = ready_q_head->next;  // iterates through entire hold queue 2. sorted
+  }
+
+
+
   printf("\n\nTotal time: %i\n", clock_to_seconds);
   end_t = clock();
   printf("Total cycles: %li\n", end_t);
