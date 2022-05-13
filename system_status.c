@@ -23,9 +23,8 @@ void add_to_process_table(struct System_status *system_status) {
         
         for (int i = 0;i<system_status->number_processes-1;i++){
             for (int j = 0;j<6;j++) {
-                new_table[i][j] = system_status->process_table[i][j];
+                system_status->process_table[i][j];
             }
-        free(system_status->process_table);
     }
 
     new_table[system_status->number_processes-1][0] = system_status->whos_on_the_cpu->job_number;
