@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
 typedef struct Job {
   int time_arrival;
   int job_number;
@@ -94,4 +99,8 @@ void print_ready_queue(void);
 void print_process_on_CPU(void);
 
 void print_wait_queue(void);
+
+// --------------------- Fucntion Prototypes for bankers_algorithm.c -------------------- //
+
+int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devices *dev_rel, struct System_status *sys_status);
 
