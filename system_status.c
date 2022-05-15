@@ -34,6 +34,8 @@ void add_to_process_table(struct System_status *system_status) {
 
     system_status->number_processes += 1;
     
+    //printf("pid: %i | runtime: %i | memory_req: %i | devices_req %i ",system_status->process_table[system_status->number_processes-1][0],system_status->process_table[system_status->number_processes][1],system_status->process_table[system_status->number_processes][2],system_status->process_table[system_status->number_processes][3]);
+
 }
 
 

@@ -86,7 +86,7 @@ struct Request_devices *send_to_requests(struct Request_devices *request_device_
 
 struct Release_devices *send_to_releases(struct Release_devices *release_device_head, struct Release_devices *req);
 
-struct Job *send_to_read_q(struct Job *job, struct Job *req);
+struct Job *send_to_ready_q(struct Job *job, struct Job *req,struct System_status *system_status);
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
@@ -115,3 +115,8 @@ int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devi
 // --------------------- Fucntion Prototypes for cpu.c -------------------- //
 
 struct Job *ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
+
+
+// --------------------- Fucntion Prototypes for main.c -------------------- //
+
+struct Event_arrival *process_external_event(struct Event_arrival *event_list_head);

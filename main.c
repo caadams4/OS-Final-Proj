@@ -50,7 +50,6 @@ int main(void) {
 
   while (event_list_head != NULL) { // iterates through each event!
 
-    //time_ticker = clock()%1000000;
     time_ticker = clock()%100000;
     time_interval = 0;
     if (time_ticker == 0) {
@@ -60,81 +59,84 @@ int main(void) {
         system_status->whos_on_the_cpu->run_time -= 1;
       }
       clock_to_seconds++;
-      printf("start_time + %i\n",clock_to_seconds);
-    /* --------- CPU ----------- */
-      // Tick down / is the current processed finish / context switch performed
-      if (system_status->time_quantum == 0 || system_status->whos_on_the_cpu->run_time == 0) {
-        printf("SWITCHING FROM %i (cpu) to %i (ready q)",ready_q_head->job_number,system_status->whos_on_the_cpu->job_number);
-        ready_q_to_CPU(ready_q_head,system_status);
-        //add_to_process_table(system_status);
-        system_status->time_quantum = quantum_interupt_system_baseline;
-      }
-        
 
-      // function for ready_queue to CPU
-      
-      //print_process_table(system_status);
+    /* --------- CPU ----------- */
+
+      // TODO job complete 
+
+        // Condition: system_status->run_time == 0
+                    // aka job is complete, on to the next one
+
+        // 1. Take job off CPU and place into complete queue
+        // 2. Release memory and/or devices
+        // 3. Use bankers algorithm to determine next job from ready queue ( using device allocation )
+        // 4. Check hold queue 1 and 2 for jobs and put them into the ready queue
+
+      // TODO context switch
+
+        // Condition: system_status->time_quantum == 0
+                    // aka job has been processed for the alloted time and needs to switch
+
+        // 1. Take job off CPU, then add to end of ready queue. 
+        // 2. Release memory and/or devices
+        // 3. Use bankers algorithm to determine next job from ready queue ( using device allocation )
 
     /* --------- Internal events ----------- */
-      // Are there any device requests for the process currently on the cpu
+
+      // TODO if job is on CPU, check request queue and release queue for internal events
+
+        // Condition: system_status->whos_on_the_cpu != NULL
+                    // aka a job is on the cpu
+
+        // Why? device requests and release only occures when the specified job has request pending
+        // 1. Check release list for job num of whos on the CPU
+        // 2. Check request list for job num of whos on the CPU
+        // 3. If found, perform the action
+
+
+
 
 
 
     /* --------- External events ----------- */
-      // Event arrivals
-
       if (clock_to_seconds == event_list_head->time_arrival) {
-
         if (event_list_head->job) {
           struct Job *job = event_list_head->job;
-
-          //Not sure if this is the right place for this
           //banker(job, request_device_head, release_device_head, system_status);
-
-        
-          if (job->memory_required > max_memory && job->devices_required > max_devices) {
+          if (job->memory_required > max_memory || job->devices_required > max_devices) {
             printf("Rejecting job number %i\n\n",job->job_number); // reject event -- requires too much memory
           } else {
 
-
+            // -------------------- //
 
             if (job->memory_required < system_status->memory_available) {
               printf("Inducting job with priority %i at time: %i\n\n",job->priority, job->time_arrival);
-              // TODO Enough available memory? send to ready queue
-              system_status->number_processes += 1;
+              ready_q_head = send_to_ready_q(ready_q_head,job,system_status);
 
-              ready_q_head = send_to_read_q(ready_q_head,job);
-
-
+            // -------------------- //
 
             } else {
-              printf("Sending job with priority %i to hold queue at time: %i\n\n",job->priority, job->time_arrival);
               if (event_list_head->job->priority == 1) {
                 hold_q_1_head = send_to_h_q_1(hold_q_1_head, job); // add job to hold queue 1 ( defined in linked_list.c )
               } else {
                 hold_q_2_head = send_to_h_q_2(hold_q_2_head, job); // add job to hold queue 2 ( defined in linked_list.c )
               }
             }
-
           }
-
-        } else if (event_list_head->request_devices) {  // TODO Device request
-          puts("make request!");
+        } else if (event_list_head->request_devices) {  
           request_device_head = send_to_requests(request_device_head, event_list_head->request_devices);
-        } else if (event_list_head->release_devices) {  // TODO Device release
+        } else if (event_list_head->release_devices) {  
           release_device_head = send_to_releases(release_device_head, event_list_head->release_devices);
         } else if (event_list_head->display_status == 1) {
           //print_system_status(system_status);
+          // TODO make the display status pretty
         }
 
-      
-      if (process_on_the_cpu == 0 && ready_q_head != NULL) {
-        puts("why");
-        ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
-        //add_to_process_table(system_status);
-        printf("\n\n!!!%i!!!\n\n",system_status->whos_on_the_cpu->job_number);
-        process_on_the_cpu = 1;
-      }
+        if (process_on_the_cpu == 0 && ready_q_head != NULL) { // if no process on CPU, bring process from ready queue on to CPU
+          ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
+          add_to_process_table(system_status);
+          process_on_the_cpu = 1;
+        }
 
       event_list_head = event_list_head->next;  // iterator changes to next evet for while loop
       }
@@ -143,6 +145,15 @@ int main(void) {
     if (system_status->whos_on_the_cpu == NULL && ready_q_head != NULL) system_status->whos_on_the_cpu = ready_q_head;
 
   }
+
+
+
+
+
+
+
+
+
   while (hold_q_2_head != NULL) {   // prints Hold queue 2 contents
     printf("FIFO Queue (hold Q 2) Runtime: %i - Job No. %i\n",hold_q_2_head->run_time,hold_q_2_head->job_number);
     hold_q_2_head = hold_q_2_head->next;  // iterates through entire hold queue 2. sorted
@@ -155,9 +166,7 @@ int main(void) {
     printf("Ready queue Runtime: %i - Job No. %i\n",ready_q_head->run_time,ready_q_head->job_number);
     ready_q_head = ready_q_head->next;  // iterates through entire hold queue 2. sorted
   }
-
   print_process_table(system_status);
-
   return 0;
 }
 
