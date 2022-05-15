@@ -33,7 +33,7 @@ typedef struct System_status {
   int time_quantum;
   int number_processes;
   struct Job *whos_on_the_cpu;
-  int *process_table[];
+  int *process_table[100][6];
 } System_status;
 
 typedef struct Event_arrival {
@@ -92,11 +92,11 @@ struct Job *send_to_read_q(struct Job *job, struct Job *req);
 
 void add_to_process_table(struct System_status *system_status);
 
-void print_system_status(void);
+void print_system_status(struct System_status *system_status);
 
 void print_system_resources(void);
 
-void print_process_table(void);
+void print_process_table (struct System_status *system_status);
 
 void print_hold_queues(void);
 
@@ -110,3 +110,8 @@ void print_wait_queue(void);
 
 int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devices *dev_rel, struct System_status *sys_status);
 
+
+
+// --------------------- Fucntion Prototypes for cpu.c -------------------- //
+
+struct Job *ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
