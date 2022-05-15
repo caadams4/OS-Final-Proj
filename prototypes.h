@@ -31,7 +31,9 @@ typedef struct System_status {
   int memory_available;
   int serial_devices_available;
   int time_quantum;
+  int number_processes;
   struct Job *whos_on_the_cpu;
+  int *process_table[100][6];
 } System_status;
 
 typedef struct Event_arrival {
@@ -84,16 +86,17 @@ struct Request_devices *send_to_requests(struct Request_devices *request_device_
 
 struct Release_devices *send_to_releases(struct Release_devices *release_device_head, struct Release_devices *req);
 
-struct Job *send_to_read_q(struct Job *job, struct Job *req);
+struct Job *send_to_ready_q(struct Job *job, struct Job *req,struct System_status *system_status);
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
+void add_to_process_table(struct System_status *system_status);
 
-void print_system_status(void);
+void print_system_status(struct System_status *system_status);
 
 void print_system_resources(void);
 
-void print_process_table(void);
+void print_process_table (struct System_status *system_status);
 
 void print_hold_queues(void);
 
@@ -107,3 +110,13 @@ void print_wait_queue(void);
 
 int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devices *dev_rel, struct System_status *sys_status);
 
+
+
+// --------------------- Fucntion Prototypes for cpu.c -------------------- //
+
+struct Job *ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
+
+
+// --------------------- Fucntion Prototypes for main.c -------------------- //
+
+struct Event_arrival *process_external_event(struct Event_arrival *event_list_head);

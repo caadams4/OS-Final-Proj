@@ -112,7 +112,7 @@ void device_request(Request_devices *request_devices, char *job) {
   // configures request devices event
 
   char *parsed_input = strtok(job, " ");
-  request_devices->next == NULL;
+  request_devices->next = NULL;
   
   parsed_input = strtok(NULL, " "); // int arrival time
   request_devices->time_arrival = atoi(parsed_input);
@@ -130,7 +130,7 @@ void device_release(Release_devices *release_devices, char *job) {
   // configures release devices event
 
   char *parsed_input = strtok(job, " ");
-  release_devices->next == NULL;
+  release_devices->next = NULL;
   
   parsed_input = strtok(NULL, " "); // int arrival time
   release_devices->time_arrival = atoi(parsed_input);
@@ -159,6 +159,9 @@ void sys_config(System_status *system_status, char *sys_specs) {
   
   parsed_job = strtok(NULL, " Q="); // Time quantum
   system_status->time_quantum = atoi(parsed_job);
+
+  system_status->number_processes = 0;
+  system_status->whos_on_the_cpu = NULL;
 }
 
   // display status based on input 

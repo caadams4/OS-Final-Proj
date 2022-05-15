@@ -30,16 +30,17 @@ struct Release_devices *send_to_releases(struct Release_devices *release_device_
 }
 
 
-struct Job *send_to_read_q(struct Job *job, struct Job *req) {
+struct Job *send_to_ready_q(struct Job *ready_q_head, struct Job *incoming_job,struct System_status *system_status) {
     // SJF
-    if (job == NULL) {
-        job = req;
+    if (ready_q_head == NULL) {
+        ready_q_head = incoming_job;
     } else {
-        struct Job *tmp_job = job;
-        while (tmp_job->next != NULL) {    //hold_q_1_head->next removed
-            tmp_job = tmp_job->next;
+        struct Job *tmp_ready_q_head = ready_q_head;
+        while (tmp_ready_q_head->next != NULL) {    //hold_q_1_head->next removed
+            tmp_ready_q_head = tmp_ready_q_head->next;
         }
-        tmp_job->next = req; // add req to end of the Hold Queue 2 list
+        tmp_ready_q_head->next = incoming_job; // add req to end of the ready q
     }
-    return job;
+    system_status->memory_available -= ready_q_head->memory_required;
+    return ready_q_head;
 }
