@@ -5,7 +5,6 @@ void print_system_status(struct System_status *system_status) {
 
     print_system_resources();
 
-
     print_hold_queues();
 
     print_ready_queue();
@@ -32,8 +31,8 @@ void print_process_table (struct System_status *system_status,int process_table[
     puts("--------------------------------------------------------\n");
     puts("Job ID    Arrival Time    Finish Time    Turnaround Time\n");
     puts("========================================================\n");
-    for (int i = 0; i<system_status->number_processes;i++) {
-        printf("  %i         %i         %i         %i         \n",process_table[i][0],process_table[i][4],process_table[i][5],process_table[i][5]-process_table[i][4]);
+    for (int i = 1; i<system_status->number_processes+1;i++) {
+        printf("  %i            %i             %i              %i         \n",process_table[i][0],process_table[i][4],process_table[i][5],process_table[i][5]-process_table[i][4]);
     }
 
 /*

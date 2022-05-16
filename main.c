@@ -63,7 +63,7 @@ int main(void) {
       time_interval = 1;
       if (system_status->whos_on_the_cpu != NULL) {
         system_status->time_quantum -= 1;
-        if (proc_table[system_status->whos_on_the_cpu->job_number-1][1] > 0) proc_table[system_status->whos_on_the_cpu->job_number-1][1] -= 1;
+        if (proc_table[system_status->whos_on_the_cpu->job_number][1] > 0) proc_table[system_status->whos_on_the_cpu->job_number][1] -= 1;
       }
       clock_to_seconds++;
       printf("%i",clock_to_seconds);
@@ -78,11 +78,10 @@ int main(void) {
         // 3. Use bankers algorithm to determine next job from ready queue ( using device allocation )
         // 4. Check hold queue 1 and 2 for jobs and put them into the ready queue
       if (system_status->whos_on_the_cpu != NULL){
-        if (proc_table[system_status->whos_on_the_cpu->job_number-1][1] == 0) {
 
-          printf("finished job %i\n\n",system_status->whos_on_the_cpu->job_number);
+        if (proc_table[system_status->whos_on_the_cpu->job_number][1] == 0) {
           
-          proc_table[system_status->whos_on_the_cpu->job_number-1][5] = clock_to_seconds;
+          proc_table[system_status->whos_on_the_cpu->job_number][5] = clock_to_seconds;
           complete_q = send_to_complete_q(complete_q, system_status->whos_on_the_cpu, system_status,proc_table,resource_table);
           //realease devices
 
@@ -99,14 +98,14 @@ int main(void) {
             int mem = hold_q_1_head->memory_required;
             if (mem < resource_table[0]) {
               ready_q_head = send_to_ready_q(ready_q_head, hold_q_1_head, system_status); // process moving into ready queue, add to process table
-              proc_table[hold_q_1_head->job_number-1][0] = hold_q_1_head->job_number;
-              proc_table[hold_q_1_head->job_number-1][1] = hold_q_1_head->run_time;
-              proc_table[hold_q_1_head->job_number-1][2] = hold_q_1_head->memory_required;
-              proc_table[hold_q_1_head->job_number-1][3] = 1;
-              proc_table[hold_q_1_head->job_number-1][5] = 0;
+              proc_table[hold_q_1_head->job_number][0] = hold_q_1_head->job_number;
+              proc_table[hold_q_1_head->job_number][1] = hold_q_1_head->run_time;
+              proc_table[hold_q_1_head->job_number][2] = hold_q_1_head->memory_required;
+              proc_table[hold_q_1_head->job_number][3] = 1;
+              proc_table[hold_q_1_head->job_number][5] = 0;
 
-              max_table[hold_q_1_head->job_number-1][0] = hold_q_1_head->memory_required;
-              max_table[hold_q_1_head->job_number-1][1] = hold_q_1_head->devices_required;
+              max_table[hold_q_1_head->job_number][0] = hold_q_1_head->memory_required;
+              max_table[hold_q_1_head->job_number][1] = hold_q_1_head->devices_required;
 
               hold_q_1_head = hold_q_1_head->next;
             }
@@ -116,14 +115,14 @@ int main(void) {
             int mem = hold_q_2_head->memory_required;
             if (mem < resource_table[0]) {
               ready_q_head = send_to_ready_q(ready_q_head, hold_q_2_head, system_status); // process moving into ready queue, add to process table
-              proc_table[hold_q_2_head->job_number-1][0] = hold_q_2_head->job_number;
-              proc_table[hold_q_2_head->job_number-1][1] = hold_q_2_head->run_time;
-              proc_table[hold_q_2_head->job_number-1][2] = hold_q_2_head->memory_required;
-              proc_table[hold_q_2_head->job_number-1][3] = 1;
-              proc_table[hold_q_2_head->job_number-1][5] = 0;
+              proc_table[hold_q_2_head->job_number][0] = hold_q_2_head->job_number;
+              proc_table[hold_q_2_head->job_number][1] = hold_q_2_head->run_time;
+              proc_table[hold_q_2_head->job_number][2] = hold_q_2_head->memory_required;
+              proc_table[hold_q_2_head->job_number][3] = 1;
+              proc_table[hold_q_2_head->job_number][5] = 0;
 
-              max_table[hold_q_2_head->job_number-1][0] = hold_q_2_head->memory_required;
-              max_table[hold_q_2_head->job_number-1][1] = hold_q_2_head->devices_required;
+              max_table[hold_q_2_head->job_number][0] = hold_q_2_head->memory_required;
+              max_table[hold_q_2_head->job_number][1] = hold_q_2_head->devices_required;
 
               hold_q_2_head = hold_q_2_head->next;
             } 
@@ -154,7 +153,7 @@ int main(void) {
         if (event_list_head->job) {
           struct Job *job = event_list_head->job;
           system_status->number_processes+=1;
-          proc_table[job->job_number-1][4] = clock_to_seconds;
+          proc_table[job->job_number][4] = clock_to_seconds;
           //banker(job, request_device_head, release_device_head, system_status);
           if (job->memory_required > max_memory || job->devices_required > max_devices) {
             printf("Rejecting job number %i\n\n",job->job_number); // reject event -- requires too much memory
@@ -162,14 +161,14 @@ int main(void) {
 
             if (job->memory_required < resource_table[0]) {
               num_jobs += 1;
-              proc_table[job->job_number-1][0] = job->job_number;
-              proc_table[job->job_number-1][1] = job->run_time;
-              proc_table[job->job_number-1][2] = job->memory_required;
-              proc_table[job->job_number-1][3] = 1;
-              proc_table[job->job_number-1][5] = 0;
+              proc_table[job->job_number][0] = job->job_number;
+              proc_table[job->job_number][1] = job->run_time;
+              proc_table[job->job_number][2] = job->memory_required;
+              proc_table[job->job_number][3] = 1;
+              proc_table[job->job_number][5] = 0;
 
-              max_table[job->job_number-1][0] = job->memory_required;
-              max_table[job->job_number-1][1] = job->devices_required;
+              max_table[job->job_number][0] = job->memory_required;
+              max_table[job->job_number][1] = job->devices_required;
 
               ready_q_head = send_to_ready_q(ready_q_head,job,system_status);
               update_resource_table(job->memory_required *-1,0,resource_table); // subtracts required memory from resource pool
@@ -196,7 +195,7 @@ int main(void) {
 
         if (process_on_the_cpu == 0 && ready_q_head != NULL) { // if no process on CPU, bring process from ready queue on to CPU
           // add bankers alg here, call start_job from there
-          ready_q_head = start_job(system_status, ready_q_head, proc_table); // should be called from bankers
+          ready_q_head = start_job(system_status, ready_q_head, proc_table); 
           process_on_the_cpu = 1;
         }
 
@@ -205,13 +204,12 @@ int main(void) {
     }
 
     if (system_status->whos_on_the_cpu == NULL && ready_q_head != NULL) system_status->whos_on_the_cpu = ready_q_head;
-
   }
-
-  print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status);
-
+  print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status); // Print status for situational awareness
   return 0;
 }
+
+
 
 void print_status(struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,struct Job *complete_q,struct System_status *system_status) {
 
