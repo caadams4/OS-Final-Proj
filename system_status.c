@@ -5,7 +5,6 @@ void print_system_status(struct System_status *system_status) {
 
     print_system_resources();
 
-    print_process_table(system_status);
 
     print_hold_queues();
 
@@ -15,22 +14,20 @@ void print_system_status(struct System_status *system_status) {
     print_wait_queue();
 }
 
-
-void add_to_process_table(struct System_status *system_status) {
-
-
-    printf("Who is on the CPU: %i\n",system_status->whos_on_the_cpu->job_number);
-        printf("Who is on the CPU: %i\n",system_status->whos_on_the_cpu->run_time);
-            printf("Who is on the CPU: %i\n",system_status->whos_on_the_cpu->memory_required);
-                printf("Who is on the CPU: %i\n",system_status->whos_on_the_cpu->devices_required);
+void update_resource_table(int memory_update, int devices_update,int resource_table[]) {
+    resource_table[0] += memory_update;
+    resource_table[1] += devices_update;
+}
 
 
-    system_status->process_table[system_status->number_processes][0] = system_status->whos_on_the_cpu->job_number;
-    system_status->process_table[system_status->number_processes][1] = system_status->whos_on_the_cpu->run_time;
-    system_status->process_table[system_status->number_processes][2] = system_status->whos_on_the_cpu->memory_required;
-    system_status->process_table[system_status->number_processes][3] = system_status->whos_on_the_cpu->devices_required;
-    system_status->process_table[system_status->number_processes][4] = 0;
-    system_status->process_table[system_status->number_processes][5] = 0;
+void add_to_process_table(struct System_status *system_status, int process_table[][6]) {
+
+    process_table[system_status->number_processes][0] = system_status->whos_on_the_cpu->job_number;
+    process_table[system_status->number_processes][1] = system_status->whos_on_the_cpu->run_time;
+    process_table[system_status->number_processes][2] = system_status->whos_on_the_cpu->memory_required;
+    process_table[system_status->number_processes][3] = system_status->whos_on_the_cpu->devices_required;
+    process_table[system_status->number_processes][4] = 0;
+    process_table[system_status->number_processes][5] = 0;
 
     system_status->number_processes += 1;
     
@@ -44,13 +41,13 @@ void print_system_resources() {
     printf("At time 9999:\nCurrent Available Main Memory=200\nCurrent Devices=12\nCompleted Jobs:\n");
 }
 
-void print_process_table (struct System_status *system_status) {
+void print_process_table (struct System_status *system_status,int process_table[][6]) {
     puts("--------------------------------------------------------\n");
     puts("Job ID    Arrival Time    Finish Time    Turnaround Time\n");
     puts("========================================================\n");
     for (int i = 0; i<system_status->number_processes;i++) {
         for (int j = 0;j<6;j++) {
-            printf("  %i         ",system_status->process_table[i][j]);
+            printf("  %i         ",process_table[i][j]);
         }
         printf("\n");
     }

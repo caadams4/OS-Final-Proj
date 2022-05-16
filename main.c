@@ -1,5 +1,8 @@
 #include "prototypes.h" // ** all functions and structs protyped in protopytes.h
 
+#define PROC_TABLE_SIZE 100
+void print_status(struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,struct Job *complete_q,struct System_status *system_status);
+
 /*
 typedef struct Event_arrival {    
 
@@ -29,6 +32,8 @@ typedef struct Event_arrival {
 
 
 int main(void) {
+  int proc_table[PROC_TABLE_SIZE][6] = {{0,0,0,0,0,0}};
+  int resource_table[2] = {0,0}; // {mem,devs}
   clock_t start_t, end_t, total_t;
   int process_on_the_cpu = 0;
   int clock_to_seconds = 0, time_ticker;
@@ -38,11 +43,13 @@ int main(void) {
   struct Job *hold_q_2_head = NULL;
   struct Job *ready_q_head = NULL;
   struct Job *wait_q = NULL;
+  struct Job *complete_q = NULL;
   struct Request_devices *request_device_head = NULL;
   struct Release_devices *release_device_head = NULL;
   struct System_status *system_status = event_list_head->system_status; // creates a struct system config
   max_devices = system_status->serial_devices_available;
   max_memory = system_status->memory_available;
+  update_resource_table(max_memory,max_devices,resource_table);
   quantum_interupt_system_baseline = system_status->time_quantum;
 
   int time_interval;
@@ -57,6 +64,7 @@ int main(void) {
       if (system_status->whos_on_the_cpu != NULL) {
         system_status->time_quantum -= 1;
         system_status->whos_on_the_cpu->run_time -= 1;
+        proc_table[system_status->whos_on_the_cpu->job_number-1][1] -= 1;
       }
       clock_to_seconds++;
 
@@ -71,15 +79,51 @@ int main(void) {
         // 2. Release memory and/or devices
         // 3. Use bankers algorithm to determine next job from ready queue ( using device allocation )
         // 4. Check hold queue 1 and 2 for jobs and put them into the ready queue
+      if (system_status->whos_on_the_cpu != NULL){
+  
+        if (proc_table[system_status->whos_on_the_cpu->job_number-1][1] == 0) {
 
-      // TODO context switch
+          printf("finished job %i\n",system_status->whos_on_the_cpu->job_number);
 
-        // Condition: system_status->time_quantum == 0
-                    // aka job has been processed for the alloted time and needs to switch
+          complete_q = send_to_complete_q(complete_q, system_status->whos_on_the_cpu, system_status,proc_table,resource_table);
 
-        // 1. Take job off CPU, then add to end of ready queue. 
-        // 2. Release memory and/or devices
-        // 3. Use bankers algorithm to determine next job from ready queue ( using device allocation )
+          system_status->serial_devices_available -= 1;
+
+          if (ready_q_head) {
+            system_status->memory_available -= ready_q_head->memory_required;
+            proc_table[ready_q_head->job_number-1][4] = clock_to_seconds;
+            update_resource_table(0,-1,proc_table);
+            ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
+            add_to_process_table(system_status,proc_table);
+            system_status->time_quantum = quantum_interupt_system_baseline;
+            proc_table[system_status->whos_on_the_cpu->job_number-1][1] = system_status->whos_on_the_cpu->run_time;
+          } else {
+            system_status->whos_on_the_cpu = NULL;
+          }
+
+          if (hold_q_1_head) { 
+            int mem = hold_q_1_head->memory_required;
+            if (mem < resource_table[0]) {
+              ready_q_head = send_to_ready_q(ready_q_head, hold_q_1_head, system_status);
+              hold_q_1_head = hold_q_1_head->next;
+            }
+            update_resource_table(mem*-1,0,proc_table);
+          } 
+          if (hold_q_2_head) {
+            int mem = hold_q_2_head->memory_required;
+            if (mem < resource_table[0]) {
+              ready_q_head = send_to_ready_q(ready_q_head, hold_q_2_head, system_status);
+              hold_q_2_head = hold_q_2_head->next;
+            } 
+            update_resource_table(mem*-1,0,proc_table);
+          }
+        } else if (system_status->time_quantum == 0) {
+          puts("context switch");
+          ready_q_head = context_switch(ready_q_head, system_status->whos_on_the_cpu,system_status, proc_table,resource_table);
+        }     
+      }
+
+      if (system_status->time_quantum == 0) system_status->time_quantum = quantum_interupt_system_baseline;
 
     /* --------- Internal events ----------- */
 
@@ -93,11 +137,6 @@ int main(void) {
         // 2. Check request list for job num of whos on the CPU
         // 3. If found, perform the action
 
-
-
-
-
-
     /* --------- External events ----------- */
       if (clock_to_seconds == event_list_head->time_arrival) {
         if (event_list_head->job) {
@@ -107,19 +146,18 @@ int main(void) {
             printf("Rejecting job number %i\n\n",job->job_number); // reject event -- requires too much memory
           } else {
 
-            // -------------------- //
-
-            if (job->memory_required < system_status->memory_available) {
-              printf("Inducting job with priority %i at time: %i\n\n",job->priority, job->time_arrival);
+            if (job->memory_required < resource_table[0]) {
               ready_q_head = send_to_ready_q(ready_q_head,job,system_status);
-
-            // -------------------- //
+              update_resource_table(job->memory_required *-1,0,resource_table); // subtracts required memory from resource pool
+              
 
             } else {
               if (event_list_head->job->priority == 1) {
                 hold_q_1_head = send_to_h_q_1(hold_q_1_head, job); // add job to hold queue 1 ( defined in linked_list.c )
+                print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status);
               } else {
                 hold_q_2_head = send_to_h_q_2(hold_q_2_head, job); // add job to hold queue 2 ( defined in linked_list.c )
+                print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status);
               }
             }
           }
@@ -128,13 +166,14 @@ int main(void) {
         } else if (event_list_head->release_devices) {  
           release_device_head = send_to_releases(release_device_head, event_list_head->release_devices);
         } else if (event_list_head->display_status == 1) {
+          puts("stsus here");
           //print_system_status(system_status);
           // TODO make the display status pretty
         }
 
         if (process_on_the_cpu == 0 && ready_q_head != NULL) { // if no process on CPU, bring process from ready queue on to CPU
-          ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
-          add_to_process_table(system_status);
+          // add bankers alg here, call start_job from there
+          ready_q_head = start_job(system_status, ready_q_head, proc_table, clock_to_seconds); // should be called from bankers
           process_on_the_cpu = 1;
         }
 
@@ -146,13 +185,12 @@ int main(void) {
 
   }
 
+  print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status);
 
+  return 0;
+}
 
-
-
-
-
-
+void print_status(struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,struct Job *complete_q,struct System_status *system_status) {
 
   while (hold_q_2_head != NULL) {   // prints Hold queue 2 contents
     printf("FIFO Queue (hold Q 2) Runtime: %i - Job No. %i\n",hold_q_2_head->run_time,hold_q_2_head->job_number);
@@ -166,7 +204,10 @@ int main(void) {
     printf("Ready queue Runtime: %i - Job No. %i\n",ready_q_head->run_time,ready_q_head->job_number);
     ready_q_head = ready_q_head->next;  // iterates through entire hold queue 2. sorted
   }
-  print_process_table(system_status);
-  return 0;
-}
+    while (complete_q != NULL){
+    printf("complete queue: Job No. %i\n",complete_q->job_number);
+    complete_q = complete_q->next;  // iterates through entire hold queue 2. sorted
+  }
 
+  
+}

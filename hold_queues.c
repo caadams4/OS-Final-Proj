@@ -81,3 +81,9 @@ struct Job *compare_job_lengths(struct Job *incoming_job, struct Job *this_job, 
     
     return hold_q_2_head;
 }
+
+
+void hold_q_to_ready_q(struct Job *hold_q_head, struct Job *ready_q_head,struct System_status *system_status) {
+    
+    puts("ys");
+}
