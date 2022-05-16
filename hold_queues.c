@@ -1,15 +1,11 @@
 #include "prototypes.h"
 
 
-
-// add a node
-
 struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
     // SJF
     struct Job *tmp_hold_q_1_head = hold_q_1_head;
     struct Job *tmp2_hold_q_1_head;
     
-
     if (hold_q_1_head == NULL) {
         hold_q_1_head = job;
         tmp_hold_q_1_head = hold_q_1_head;
@@ -80,10 +76,4 @@ struct Job *compare_job_lengths(struct Job *incoming_job, struct Job *this_job, 
     }
     
     return hold_q_2_head;
-}
-
-
-void hold_q_to_ready_q(struct Job *hold_q_head, struct Job *ready_q_head,struct System_status *system_status) {
-    
-    puts("ys");
 }
