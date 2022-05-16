@@ -18,7 +18,7 @@ For help with c file structure and compliation https://courses.cs.washington.edu
 
 TODO:
 
-- print system status with all queues
+- print system status with all queues (working on this @ 7:29 pm)
 
 - implement bankers algorithm 
   - returns ready queue safe sequence ( worse option )
