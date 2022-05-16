@@ -67,7 +67,7 @@ void print_max(struct System_status *system_status,int max_table[][2],int proces
             puts("========================\n");
     
     for (int i = 1; i<system_status->number_processes+1;i++) {
-        printf("  %i      %i          %i\n",process_table[i][0],max_table[0],max_table[1]);
+        printf("  %i      %i          %i\n",process_table[i][0],max_table[i][0],max_table[i][1]);
     }
     
 }

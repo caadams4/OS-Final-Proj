@@ -84,11 +84,7 @@ int main(void) {
           resource_table[0] += proc_table[system_status->whos_on_the_cpu->job_number][2];
           printf("memory now: %i\n",resource_table[0]);
 
-          if (system_status->whos_on_the_cpu->job_number == 3) {
-  print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status); // Print status for situational awareness
-  print_resources(system_status,resource_table);
 
-          }
           complete_q = send_to_complete_q(complete_q, system_status->whos_on_the_cpu, system_status,proc_table,resource_table);
 
           if (ready_q_head) {
