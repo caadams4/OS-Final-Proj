@@ -88,6 +88,10 @@ struct Release_devices *send_to_releases(struct Release_devices *release_device_
 
 struct Job *send_to_ready_q(struct Job *job, struct Job *req,struct System_status *system_status);
 
+struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job,struct System_status *system_status,int process_table[][6],int resource_table[]);
+
+void resource_allocation(struct System_status *system_status,int process_table[][6],int resource_table[]);
+
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
 void update_resource_table(int memory_update, int devices_update,int resource_table[]);
@@ -116,11 +120,13 @@ int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devi
 
 // --------------------- Fucntion Prototypes for cpu.c -------------------- //
 
-void ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
+struct Job *ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
 
-void start_job(struct System_status *system_status, struct Job *ready_q_head, int process_table[][6], int start_time);
+struct Job *start_job(struct System_status *system_status, struct Job *ready_q_head, int process_table[][6], int start_time);
 
 void finished_job(struct System_status *system_status, struct Job *complete_q_head, int process_table[][6], int finishh_time);
+
+struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going,struct System_status *system_status, int process_table[][6],int resource_table[]);
 
 // --------------------- Fucntion Prototypes for main.c -------------------- //
 

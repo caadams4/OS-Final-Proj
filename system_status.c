@@ -22,9 +22,6 @@ void update_resource_table(int memory_update, int devices_update,int resource_ta
 
 void add_to_process_table(struct System_status *system_status, int process_table[][6]) {
 
-
-    
-
     process_table[system_status->number_processes][0] = system_status->whos_on_the_cpu->job_number;
     process_table[system_status->number_processes][1] = system_status->whos_on_the_cpu->run_time;
     process_table[system_status->number_processes][2] = system_status->whos_on_the_cpu->memory_required;
