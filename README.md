@@ -24,7 +24,7 @@ TODO:
   - returns ready queue safe sequence ( worse option )
   - or returns next safe job from ready queue ( better option )
   
-- when mounted on CPU, job checks for requests/releases
+- when mounted on CPU, job checks for requests/releases 
   - if found, immediately send to wait queue and process next ready queue node
   
-- check wait queue before hold queues
+- check wait queue before hold queues 
