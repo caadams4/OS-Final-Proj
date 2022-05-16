@@ -20,20 +20,7 @@ void update_resource_table(int memory_update, int devices_update,int resource_ta
 }
 
 
-void add_to_process_table(struct System_status *system_status, int process_table[][6]) {
 
-    process_table[system_status->number_processes][0] = system_status->whos_on_the_cpu->job_number;
-    process_table[system_status->number_processes][1] = system_status->whos_on_the_cpu->run_time;
-    process_table[system_status->number_processes][2] = system_status->whos_on_the_cpu->memory_required;
-    process_table[system_status->number_processes][3] = system_status->whos_on_the_cpu->devices_required;
-    process_table[system_status->number_processes][4] = 0;
-    process_table[system_status->number_processes][5] = 0;
-
-    system_status->number_processes += 1;
-    
-    //printf("pid: %i | runtime: %i | memory_req: %i | devices_req %i ",system_status->process_table[system_status->number_processes-1][0],system_status->process_table[system_status->number_processes][1],system_status->process_table[system_status->number_processes][2],system_status->process_table[system_status->number_processes][3]);
-
-}
 
 
 
@@ -46,17 +33,17 @@ void print_process_table (struct System_status *system_status,int process_table[
     puts("Job ID    Arrival Time    Finish Time    Turnaround Time\n");
     puts("========================================================\n");
     for (int i = 0; i<system_status->number_processes;i++) {
-        for (int j = 0;j<6;j++) {
-            printf("  %i         ",process_table[i][j]);
-        }
-        printf("\n");
+        printf("  %i         %i         %i         %i         \n",process_table[i][0],process_table[i][4],process_table[i][5],process_table[i][5]-process_table[i][4]);
     }
 
-    printf("  %i         ",system_status->number_processes);
-    /*
-    TODO: print each COMPLETED process in its own line
-    
-    */
+/*
+           _____________________PROCESS TABLE_____________________________
+  index   |   [0]     [1]      [2]        [3]        [4]         [5]      |
+  data    |   pid   runtime   memory    devices   timestart   timefinish  |
+  example |    1      5         3          4          1           6       |
+  example |    2      5         3          4          6           11      |
+          |_______________________________________________________________|
+*/
 }
 
 void print_hold_queues() {

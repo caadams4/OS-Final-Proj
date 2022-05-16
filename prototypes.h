@@ -96,8 +96,6 @@ void resource_allocation(struct System_status *system_status,int process_table[]
 
 void update_resource_table(int memory_update, int devices_update,int resource_table[]);
 
-void add_to_process_table(struct System_status *system_status, int process_table[][6]);
-
 void print_system_status(struct System_status *system_status);
 
 void print_system_resources(void);
@@ -122,9 +120,9 @@ int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devi
 
 struct Job *ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
 
-struct Job *start_job(struct System_status *system_status, struct Job *ready_q_head, int process_table[][6], int start_time);
+struct Job *start_job(struct System_status *system_status, struct Job *ready_q_head, int process_table[][6]);
 
-void finished_job(struct System_status *system_status, struct Job *complete_q_head, int process_table[][6], int finishh_time);
+void finished_job(struct System_status *system_status, struct Job *complete_q_head, int process_table[][6]);
 
 struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going,struct System_status *system_status, int process_table[][6],int resource_table[]);
 

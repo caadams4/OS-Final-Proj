@@ -44,14 +44,14 @@ struct Job *send_to_ready_q(struct Job *ready_q_head, struct Job *incoming_job,s
         tmp_ready_q_head->next = incoming_job; // add req to end of the ready q
     } 
     incoming_job->next = NULL;
+    
     system_status->memory_available -= ready_q_head->memory_required;
     printf("Job number %i is the ready queue head\n",ready_q_head->job_number);
     return ready_q_head;
 }
 
 struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_CPU,struct System_status *system_status, int process_table[][6],int resource_table[]) {
-
-
+        
         if (ready_q_head == NULL && process_table[system_status->whos_on_the_cpu->job_number-1][1] == 0) {
             return NULL;
         } if (ready_q_head == NULL && system_status->whos_on_the_cpu != NULL) {
@@ -59,6 +59,9 @@ struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_
         }
 
         system_status->whos_on_the_cpu = ready_q_head;
+        printf("\nCONTEXT SWITCHWhos off going from CPU: %i runtime: %i\n",off_going_from_CPU->job_number,process_table[off_going_from_CPU->job_number-1][1]);
+
+        printf("\nCONTEXT SWITCHWhos on the CPU: %i runtime: %i\n",ready_q_head->job_number,process_table[ready_q_head->job_number-1][1]);
         ready_q_head = ready_q_head->next;
         system_status->whos_on_the_cpu->next = NULL;
         
@@ -76,14 +79,11 @@ struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_
 
         system_status->memory_available -= ready_q_head->memory_required;
 
-        if (process_table[system_status->whos_on_the_cpu->job_number-1][0] != system_status->whos_on_the_cpu->job_number) {
-            add_to_process_table(system_status, process_table);
-        }
 
         int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number-1][3];
         update_resource_table(0, devices_required_4_next_job *-1,resource_table); // Take devices away from CPU
 
-    
+        
 
     return ready_q_head;
 }
@@ -111,10 +111,6 @@ struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job
 }
 
 void resource_allocation(struct System_status *system_status,int process_table[][6],int resource_table[]) {
-
-    if (process_table[system_status->whos_on_the_cpu->job_number-1][0] != system_status->whos_on_the_cpu->job_number) {
-        add_to_process_table(system_status, process_table);
-    }
 
     int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number-1][3];
     update_resource_table(0, devices_required_4_next_job *-1,resource_table); // Take devices away from CPU
