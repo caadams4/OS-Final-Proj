@@ -14,3 +14,17 @@
 
 
 For help with c file structure and compliation https://courses.cs.washington.edu/courses/cse374/20au/lectures/12-structs-in-c/12-structs-in-c.pdf
+
+
+TODO:
+
+- print system status with all queues
+
+- implement bankers algorithm 
+  - returns ready queue safe sequence ( worse option )
+  - or returns next safe job from ready queue ( better option )
+  
+- when mounted on CPU, job checks for requests/releases
+  - if found, immediately send to wait queue and process next ready queue node
+  
+- check wait queue before hold queues
