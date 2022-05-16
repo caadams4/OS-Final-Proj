@@ -43,7 +43,6 @@ struct Job *send_to_ready_q(struct Job *ready_q_head, struct Job *incoming_job,s
     } 
     incoming_job->next = NULL;
     
-    system_status->memory_available -= ready_q_head->memory_required;
     return ready_q_head;
 }
 
@@ -71,7 +70,6 @@ struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_
             off_going_from_CPU->next = NULL;
         }
 
-        system_status->memory_available -= ready_q_head->memory_required;
 
 
         int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number][3];
@@ -86,9 +84,6 @@ struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_
 
 struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job,struct System_status *system_status,int process_table[][6],int resource_table[]) {
   
-    int devices_back_to_CPU = process_table[system_status->whos_on_the_cpu->job_number][3];
-    int memory_back_to_CPU =  process_table[system_status->whos_on_the_cpu->job_number][2];
-    update_resource_table(memory_back_to_CPU, devices_back_to_CPU , resource_table); // Gives devices and memory back to CPU
 
     if (complete_q == NULL) {
         complete_q = out_going_job;
@@ -100,13 +95,5 @@ struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job
         tmp_complete_q->next = out_going_job; 
     }
     out_going_job->next = NULL;
-    system_status->memory_available += complete_q->memory_required;
     return complete_q;
-}
-
-void resource_allocation(struct System_status *system_status,int process_table[][6],int resource_table[]) {
-
-    int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number][3];
-    update_resource_table(0, devices_required_4_next_job *-1,resource_table); // Take devices away from CPU
-    
 }

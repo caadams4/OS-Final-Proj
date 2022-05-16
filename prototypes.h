@@ -90,11 +90,14 @@ struct Job *send_to_ready_q(struct Job *job, struct Job *req,struct System_statu
 
 struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job,struct System_status *system_status,int process_table[][6],int resource_table[]);
 
-void resource_allocation(struct System_status *system_status,int process_table[][6],int resource_table[]);
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
-void update_resource_table(int memory_update, int devices_update,int resource_table[]);
+void print_process_table(struct System_status *system_status,int process_table[][6]);
+
+void print_max(struct System_status *system_status,int max_table[][2],int process_table[][6]);
+
+void print_resources(struct System_status *system_status,int resource_table[2]);
 
 void print_system_status(struct System_status *system_status);
 

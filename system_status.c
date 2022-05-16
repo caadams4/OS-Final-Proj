@@ -27,7 +27,7 @@ void print_system_resources() {
     printf("At time 9999:\nCurrent Available Main Memory=200\nCurrent Devices=12\nCompleted Jobs:\n");
 }
 
-void print_process_table (struct System_status *system_status,int process_table[][6]) {
+void print_job_stats(struct System_status *system_status,int process_table[][6]) {
     puts("--------------------------------------------------------\n");
     puts("Job ID    Arrival Time    Finish Time    Turnaround Time\n");
     puts("========================================================\n");
@@ -43,6 +43,41 @@ void print_process_table (struct System_status *system_status,int process_table[
   example |    2      5         3          4          6           11      |
           |_______________________________________________________________|
 */
+}
+void print_process_table(struct System_status *system_status,int process_table[][6]) {
+            puts("-----------------------\n");
+            puts(" pid   memory   devices\n");
+            puts("=======================\n");
+    for (int i = 1; i<system_status->number_processes+1;i++) {
+        printf("  %i      %i       %i       \n",process_table[i][0],process_table[i][2],process_table[i][3]);
+    }
+/*
+           _____________________PROCESS TABLE_____________________________
+  index   |   [0]     [1]      [2]        [3]        [4]         [5]      |
+  data    |   pid   runtime   memory    devices   timestart   timefinish  |
+  example |    1      5         3          4          1           6       |
+  example |    2      5         3          4          6           11      |
+          |_____________________________________________________+__________|
+*/
+}
+
+void print_max(struct System_status *system_status,int max_table[][2],int process_table[][6]) {
+            puts("------------------------\n");
+            puts(" pid   memory    devices\n");
+            puts("========================\n");
+    
+    for (int i = 1; i<system_status->number_processes+1;i++) {
+        printf("  %i      %i          %i\n",process_table[i][0],max_table[0],max_table[1]);
+    }
+    
+}
+
+void print_resources(struct System_status *system_status,int resource_table[2]) {
+            puts("-----------------\n");
+            puts("memory    devices\n");
+            puts("=================\n");
+
+          printf(" %i         %i\n",resource_table[0],resource_table[1]);
 }
 
 void print_hold_queues() {
