@@ -34,6 +34,7 @@ typedef struct Event_arrival {
 int main(void) {
   int proc_table[PROC_TABLE_SIZE][6] = {{0,0,0,0,0,0}};
   int resource_table[2] = {0,0}; // {mem,devs}
+  int max_table[PROC_TABLE_SIZE][2] = {0,0}; // {mem,devs}
   clock_t start_t, end_t, total_t;
   int process_on_the_cpu = 0;
   int clock_to_seconds = 0, time_ticker;
@@ -97,12 +98,16 @@ int main(void) {
           if (hold_q_1_head) { 
             int mem = hold_q_1_head->memory_required;
             if (mem < resource_table[0]) {
-              ready_q_head = send_to_ready_q(ready_q_head, hold_q_1_head, system_status);
-              proc_table[hold_q_1_head->job_number-1][0] = system_status->whos_on_the_cpu->job_number;
-              proc_table[hold_q_1_head->job_number-1][1] = system_status->whos_on_the_cpu->run_time;
-              proc_table[hold_q_1_head->job_number-1][2] = system_status->whos_on_the_cpu->memory_required;
-              proc_table[hold_q_1_head->job_number-1][3] = system_status->whos_on_the_cpu->devices_required;
+              ready_q_head = send_to_ready_q(ready_q_head, hold_q_1_head, system_status); // process moving into ready queue, add to process table
+              proc_table[hold_q_1_head->job_number-1][0] = hold_q_1_head->job_number;
+              proc_table[hold_q_1_head->job_number-1][1] = hold_q_1_head->run_time;
+              proc_table[hold_q_1_head->job_number-1][2] = hold_q_1_head->memory_required;
+              proc_table[hold_q_1_head->job_number-1][3] = 1;
               proc_table[hold_q_1_head->job_number-1][5] = 0;
+
+              max_table[hold_q_1_head->job_number-1][0] = hold_q_1_head->memory_required;
+              max_table[hold_q_1_head->job_number-1][1] = hold_q_1_head->devices_required;
+
               hold_q_1_head = hold_q_1_head->next;
             }
             update_resource_table(mem*-1,0,proc_table);
@@ -110,12 +115,16 @@ int main(void) {
           if (hold_q_2_head) {
             int mem = hold_q_2_head->memory_required;
             if (mem < resource_table[0]) {
-              ready_q_head = send_to_ready_q(ready_q_head, hold_q_2_head, system_status);
-              proc_table[hold_q_2_head->job_number-1][0] = system_status->whos_on_the_cpu->job_number;
-              proc_table[hold_q_2_head->job_number-1][1] = system_status->whos_on_the_cpu->run_time;
-              proc_table[hold_q_2_head->job_number-1][2] = system_status->whos_on_the_cpu->memory_required;
-              proc_table[hold_q_2_head->job_number-1][3] = system_status->whos_on_the_cpu->devices_required;
+              ready_q_head = send_to_ready_q(ready_q_head, hold_q_2_head, system_status); // process moving into ready queue, add to process table
+              proc_table[hold_q_2_head->job_number-1][0] = hold_q_2_head->job_number;
+              proc_table[hold_q_2_head->job_number-1][1] = hold_q_2_head->run_time;
+              proc_table[hold_q_2_head->job_number-1][2] = hold_q_2_head->memory_required;
+              proc_table[hold_q_2_head->job_number-1][3] = 1;
               proc_table[hold_q_2_head->job_number-1][5] = 0;
+
+              max_table[hold_q_2_head->job_number-1][0] = hold_q_2_head->memory_required;
+              max_table[hold_q_2_head->job_number-1][1] = hold_q_2_head->devices_required;
+
               hold_q_2_head = hold_q_2_head->next;
             } 
             update_resource_table(mem*-1,0,proc_table);
@@ -156,8 +165,12 @@ int main(void) {
               proc_table[job->job_number-1][0] = job->job_number;
               proc_table[job->job_number-1][1] = job->run_time;
               proc_table[job->job_number-1][2] = job->memory_required;
-              proc_table[job->job_number-1][3] = job->devices_required;
+              proc_table[job->job_number-1][3] = 1;
               proc_table[job->job_number-1][5] = 0;
+
+              max_table[job->job_number-1][0] = job->memory_required;
+              max_table[job->job_number-1][1] = job->devices_required;
+
               ready_q_head = send_to_ready_q(ready_q_head,job,system_status);
               update_resource_table(job->memory_required *-1,0,resource_table); // subtracts required memory from resource pool
 
