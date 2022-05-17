@@ -14,3 +14,12 @@
 
 
 For help with c file structure and compliation https://courses.cs.washington.edu/courses/cse374/20au/lectures/12-structs-in-c/12-structs-in-c.pdf
+
+
+TODO:
+
+- implement bankers algorithm 
+  - returns ready queue safe sequence ( worse option )
+  - or returns next safe job from ready queue ( better option )
+
+  
