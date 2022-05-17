@@ -53,6 +53,3 @@ int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devi
       }
 return (0);
 }
-
-/*
-#include <stdio.h>
