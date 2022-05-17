@@ -135,11 +135,4 @@ struct Event_arrival *process_external_event(struct Event_arrival *event_list_he
 
 
 
-struct Request_devices *send_to_wait_1(struct Job *wait_q, struct Job *job);
-
-struct Request_devices *search_for_req(struct Request_devices *wait_q, struct Job *job);
-
-struct Request_devices *send_to_wait_1(struct Job *wait_q, struct Job *job);
-
-struct Release_devices *search_for_rel(struct Release_devices *wait_q, struct Job *job);
-
+struct Job *send_to_wait_1(struct Job *wait_q, struct Job *job);

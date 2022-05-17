@@ -4,11 +4,14 @@
 struct Job *ready_q_to_CPU(struct Job *ready_q_head, struct System_status *system_status) {
     // brings ready queue head on to CPU
     if (ready_q_head == NULL) {
+        puts("11123211");
         system_status->whos_on_the_cpu = NULL;
     } else {
+        puts("223331112233");
         system_status->whos_on_the_cpu = ready_q_head;
+
         ready_q_head = ready_q_head->next;
-        system_status->whos_on_the_cpu->next = NULL;
+                system_status->whos_on_the_cpu->next = NULL;
     }
     return ready_q_head;
 }

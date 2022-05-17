@@ -59,6 +59,7 @@ int main(void) {
     time_ticker = clock()%100000;
     time_interval = 0;
     if (time_ticker == 0) {
+      puts("riicktonio");
       time_interval = 1;
       if (system_status->whos_on_the_cpu != NULL) {
         system_status->time_quantum -= 1;
@@ -70,11 +71,15 @@ int main(void) {
       if (system_status->whos_on_the_cpu != NULL){
 
         if (system_status->whos_on_the_cpu && proc_table[system_status->whos_on_the_cpu->job_number][1] == 0) { // process finished, unmount
+          printf("finished %i\n",system_status->whos_on_the_cpu->job_number);
+          print_system_status(completed_jobs, system_status,clock_to_seconds,hold_q_1_head,hold_q_2_head,ready_q_head,resource_table,proc_table,wait_q);
           proc_table[system_status->whos_on_the_cpu->job_number][5] = clock_to_seconds;
           resource_table[0] += proc_table[system_status->whos_on_the_cpu->job_number][2];
-          system_status->number_processes-=1;
           completed_jobs += 1;
+
+          
           complete_q = send_to_complete_q(complete_q, system_status->whos_on_the_cpu, system_status,proc_table,resource_table);
+          print_system_status(completed_jobs, system_status,clock_to_seconds,hold_q_1_head,hold_q_2_head,ready_q_head,resource_table,proc_table,wait_q);
 
           // check wait queue before ready
           if (wait_q) {
@@ -84,13 +89,16 @@ int main(void) {
           } else if (ready_q_head) { // bankers in ready_q_to_cpu
             //bankers(system_status->number_processes, ready_q_head,max_table,proc_table,resource_table);
             ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
-            printf("mounting %i on cpu\nmemory now: %i\n",system_status->whos_on_the_cpu->job_number,resource_table[0]);
+            printf("mounting %i on cpu from ready\nmemory now: %i\n",system_status->whos_on_the_cpu->job_number,resource_table[0]);
+            if (ready_q_head) printf("ready q head now %i\n", ready_q_head->job_number);
+
             system_status->time_quantum = quantum_interupt_system_baseline;
           } else {
             system_status->whos_on_the_cpu = NULL;
           }
-
+          puts("riicky");
           if (hold_q_1_head) { 
+          puts("riicky1");
             system_status->number_processes+=1;
             int mem = hold_q_1_head->memory_required;
             if (mem < resource_table[0]) {
@@ -110,6 +118,7 @@ int main(void) {
             }
           } 
           if (hold_q_2_head) {
+          puts("riicky3");
             system_status->number_processes+=1;
             int mem = hold_q_2_head->memory_required;
             if (mem < resource_table[0]) {
@@ -131,14 +140,16 @@ int main(void) {
           }
         } else if (system_status->time_quantum == 0) {
           
-          resource_table[0] += proc_table[system_status->whos_on_the_cpu->job_number][2];
+          
+          //resource_table[0] += proc_table[system_status->whos_on_the_cpu->job_number][2];
           ready_q_head = context_switch(ready_q_head, system_status->whos_on_the_cpu,system_status, proc_table,resource_table);
-          resource_table[0] -= proc_table[system_status->whos_on_the_cpu->job_number][2];
+          //resource_table[0] -= proc_table[system_status->whos_on_the_cpu->job_number][2];
         }     
       }          
       if (wait_q) {
+        puts("riicky5");
         wait_q = ready_q_to_CPU(wait_q,system_status);
-        printf("mounting %i on cpu\nmemory now: %i FROM WAIT QUEUE!!!!!!!!!!\n",system_status->whos_on_the_cpu->job_number,resource_table[0]);
+        printf("mounting %i on cpu\nmemory now: %i FROM WAIT QUEUE!!!!!!!!!!\nwait queue is %i\n",system_status->whos_on_the_cpu->job_number,resource_table[0]);
         system_status->time_quantum = quantum_interupt_system_baseline;
       }
       if (system_status->time_quantum == 0) system_status->time_quantum = quantum_interupt_system_baseline;
@@ -157,10 +168,11 @@ int main(void) {
 
     /* --------- External events ----------- */
       if (clock_to_seconds == event_list_head->time_arrival) {
+          puts("riicky6");
         if (event_list_head->job) {
           struct Job *job = event_list_head->job;
           proc_table[job->job_number][4] = clock_to_seconds;
-          bankers(system_status->number_processes, ready_q_head,max_table,proc_table,resource_table);
+          //bankers(system_status->number_processes, ready_q_head,max_table,proc_table,resource_table);
           if (job->memory_required > max_memory || job->devices_required > max_devices) {
             printf("Rejecting job number %i\n\n",job->job_number); // reject event -- requires too much memory
           } else {
@@ -191,7 +203,11 @@ int main(void) {
           }
         } else if (event_list_head->request_devices) {  
           request_device_head = send_to_requests(request_device_head, event_list_head->request_devices);
-          printf("req_dev_head = %i\n",request_device_head->job_number);
+          struct Request_devices *tmp_request_device_head = request_device_head;
+          while (tmp_request_device_head != NULL) {
+            printf("00req_dev = %i\n",tmp_request_device_head->job_number);
+            tmp_request_device_head = tmp_request_device_head->next;
+          }
         } else if (event_list_head->release_devices) {  
           release_device_head = send_to_releases(release_device_head, event_list_head->release_devices);
         } else if (event_list_head->display_status == 1) {
@@ -202,37 +218,43 @@ int main(void) {
 
         if (process_on_the_cpu == 0 && ready_q_head != NULL) { // if no process on CPU, bring process from ready queue on to CPU
           // add bankers alg here, call start_job from there
-
           ready_q_head = start_job(system_status, ready_q_head, proc_table); 
           process_on_the_cpu = 1;
         }
 
       event_list_head = event_list_head->next;  // iterator changes to next evet for while loop
       }
+          
     }
 
     // check request queue for job on cpu
     if (system_status->whos_on_the_cpu && request_device_head) {
+
+          //print_system_status(completed_jobs, system_status,clock_to_seconds,hold_q_1_head,hold_q_2_head,ready_q_head,resource_table,proc_table,wait_q);
+          //puts("riicky8");
+          //printf("11 whos on the cpu: %i\n whos requesting %i \n", system_status->whos_on_the_cpu->job_number,request_device_head->job_number);
       if (request_device_head->job_number == system_status->whos_on_the_cpu->job_number) {
         // devie alloc ****************************************************8
-        max_table[system_status->whos_on_the_cpu->job_number][1] = request_device_head->devices_requested;
+        //puts("riicky9");
+          printf("22 whos on the cpu: %i\n whos requesting %i \n", system_status->whos_on_the_cpu->job_number,request_device_head->job_number);
         wait_q = send_to_wait_1(wait_q, system_status->whos_on_the_cpu);
+        max_table[system_status->whos_on_the_cpu->job_number][1] = request_device_head->devices_requested;
         system_status->whos_on_the_cpu = NULL;
         request_device_head = request_device_head->next;
-      } else {
         struct Request_devices *tmp_request_device_head = request_device_head;
+      } else {
         if (request_device_head->next) {
-        struct Request_devices *tmp2_request_device_head = tmp_request_device_head->next;
-        while (tmp2_request_device_head != NULL) {
-          if (tmp2_request_device_head->job_number == system_status->whos_on_the_cpu->job_number) {
-            // devie alloc ****************************************************8
-            max_table[system_status->whos_on_the_cpu->job_number][1] = tmp2_request_device_head->devices_requested;
-            wait_q = send_to_wait_1(wait_q, system_status->whos_on_the_cpu);
-            system_status->whos_on_the_cpu = NULL;
-            tmp_request_device_head->next = tmp2_request_device_head->next;
-          } else {
-            tmp_request_device_head = tmp2_request_device_head;
-            tmp2_request_device_head = tmp2_request_device_head->next;
+          struct Request_devices *tmp_request_device_head = request_device_head;
+          struct Request_devices *tmp2_request_device_head = tmp_request_device_head->next;
+          while (tmp2_request_device_head != NULL) {
+            if (tmp2_request_device_head->job_number == system_status->whos_on_the_cpu->job_number) {
+              wait_q = send_to_wait_1(wait_q, system_status->whos_on_the_cpu);
+              max_table[system_status->whos_on_the_cpu->job_number][1] = tmp2_request_device_head->devices_requested;
+              tmp_request_device_head->next = tmp2_request_device_head->next;
+              tmp2_request_device_head = NULL;
+            } else {
+              tmp_request_device_head = tmp2_request_device_head;
+              tmp2_request_device_head = tmp2_request_device_head->next;
           }
         }
       }
@@ -242,10 +264,7 @@ int main(void) {
 
     if (system_status->whos_on_the_cpu && release_device_head) {
       if (release_device_head->job_number == system_status->whos_on_the_cpu->job_number) {
-        // devie alloc ****************************************************8
         max_table[system_status->whos_on_the_cpu->job_number][1] -= release_device_head->devices_released;
-        wait_q = send_to_wait_1(wait_q, system_status->whos_on_the_cpu);
-        system_status->whos_on_the_cpu = NULL;
         release_device_head = release_device_head->next;
       } else {
         struct Release_devices *tmp_release_device_head = release_device_head;
@@ -253,10 +272,7 @@ int main(void) {
         struct Release_devices *tmp2_release_device_head = tmp_release_device_head->next;
         while (tmp2_release_device_head != NULL) {
           if (tmp2_release_device_head->job_number == system_status->whos_on_the_cpu->job_number) {
-            // devie alloc ****************************************************8
             max_table[system_status->whos_on_the_cpu->job_number][1] -= release_device_head->devices_released;
-            wait_q = send_to_wait_1(wait_q, system_status->whos_on_the_cpu);
-            system_status->whos_on_the_cpu = NULL;
             tmp_release_device_head->next = tmp2_release_device_head->next;
           } else {
             tmp_release_device_head = tmp2_release_device_head;
@@ -267,7 +283,6 @@ int main(void) {
       }
      
     }
-    if (system_status->whos_on_the_cpu == NULL && ready_q_head != NULL) system_status->whos_on_the_cpu = ready_q_head;
 
   }
   return 0;
