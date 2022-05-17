@@ -60,7 +60,6 @@ Event_arrival *read_input() {
               
         case 'D':;
           newEvent->display_status = 1;
-          printf("%i event status %i",newEvent->time_arrival,newEvent->display_status);
           break;
       }
       
@@ -146,7 +145,6 @@ void device_release(Release_devices *release_devices, char *job) {
 void sys_config(System_status *system_status, char *sys_specs) {
   // configures system_status struct with mem, devices, time quantum
 
-  printf("%s",sys_specs);
   char *parsed_job = strtok(sys_specs, " ");
   
   parsed_job = strtok(NULL, " "); // int arrival time

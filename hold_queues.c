@@ -18,6 +18,7 @@ struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
         }
     } else {
         while (hold_q_1_head->next != NULL) {    //hold_q_1_head->next removed
+
             tmp_hold_q_1_head = compare_job_lengths(job,hold_q_1_head,hold_q_1_head->next);
             if (tmp2_hold_q_1_head != tmp_hold_q_1_head) {
                 break;

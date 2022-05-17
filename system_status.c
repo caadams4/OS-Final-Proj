@@ -123,11 +123,9 @@ void print_wait_queue(struct Job *wait_q,int process_table[][6]){
 
     struct Job *tmp_wait_q = wait_q;
     while (tmp_wait_q != NULL){
-printf(" %i         %i         %i\n",tmp_wait_q->job_number,tmp_wait_q->run_time,tmp_wait_q->run_time-process_table[tmp_wait_q->job_number][1]);
+        printf(" %i         %i         %i\n",tmp_wait_q->job_number,tmp_wait_q->run_time,tmp_wait_q->run_time-process_table[tmp_wait_q->job_number][1]);
         tmp_wait_q = tmp_wait_q->next;  // iterates through entire hold queue 2. sorted
     }
-
-    puts("yee\n");
 }
 
 
