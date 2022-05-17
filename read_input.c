@@ -162,12 +162,7 @@ void sys_config(System_status *system_status, char *sys_specs) {
   system_status->whos_on_the_cpu = NULL;
 }
 
-  // display status based on input 
-void display_status() {
 
-  puts("system status HERE!!!!!!!!!!!!!!!!!!");
-
-}
 
 Event_arrival *add_event_to_end(struct Event_arrival* head) {
     // takes in pointer to the head of the linked list

@@ -5,7 +5,7 @@ struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
     // SJF
     struct Job *tmp_hold_q_1_head = hold_q_1_head;
     struct Job *tmp2_hold_q_1_head;
-    
+
     if (hold_q_1_head == NULL) {
         hold_q_1_head = job;
         tmp_hold_q_1_head = hold_q_1_head;
@@ -26,7 +26,6 @@ struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
             hold_q_1_head = hold_q_1_head->next;
         }
     }
-
     return tmp_hold_q_1_head;
 }
 
@@ -54,7 +53,6 @@ struct Job *compare_job_lengths(struct Job *incoming_job, struct Job *this_job, 
     */
 
     struct Job *hold_q_2_head = this_job;
-
     if (this_job->run_time <= incoming_job->run_time) {
         if (next_job->run_time <= incoming_job->run_time) {
             // keep moving right 

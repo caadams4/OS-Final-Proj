@@ -1,7 +1,7 @@
 #include "prototypes.h"
 
-int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int process_table[][6],int resource_table[2]){
 
+int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int process_table[][6],int resource_table[2]){
 
     int num_resources = 1; // devices 
     int index = 0, flag = 0;
@@ -41,8 +41,8 @@ int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int proce
     if(flag==1){
       printf("safe:");
       for (int i = 0; i < num_procs-1; i++)
-        printf(" P%i ->", safe[i]);
-      printf(" P%i", safe[num_procs-1]);
+        printf(" Job_num: %i ->", safe[i]);
+      printf(" Job_num: %i", safe[num_procs-1]);
     }
     return (0);
 }
