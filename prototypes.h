@@ -93,7 +93,7 @@ struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
-void print_system_status(int completed_jobs, struct System_status *system_status,int time,struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,int resource_table[],int process_table[][6]);
+void print_system_status(int completed_jobs, struct System_status *system_status,int time,struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,int resource_table[],int process_table[][6],struct Job *wait_q);
 
 void print_job_stats(struct System_status *system_status,int process_table[][6]);
 
@@ -109,13 +109,11 @@ void print_ready_queue(struct Job *ready_q_head,int process_table[][6]);
 
 void print_process_on_CPU(struct System_status *system_status,int process_table[][6]);
 
-void print_wait_queue();
+void print_wait_queue(struct Job *wait_q,int process_table[][6]);
 
 // --------------------- Fucntion Prototypes for bankers_algorithm.c -------------------- //
 
 int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int process_table[][6],int resource_table[2]);
-
-
 
 // --------------------- Fucntion Prototypes for cpu.c -------------------- //
 
@@ -127,6 +125,10 @@ void finished_job(struct System_status *system_status, struct Job *complete_q_he
 
 struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going,struct System_status *system_status, int process_table[][6],int resource_table[]);
 
+struct Job *wait_q_to_CPU(struct Job *wait_q_head, struct System_status *system_status);
+
 // --------------------- Fucntion Prototypes for main.c -------------------- //
 
 struct Event_arrival *process_external_event(struct Event_arrival *event_list_head);
+
+struct Job *send_to_wait_1(struct Job *wait_q, struct Job *job);
