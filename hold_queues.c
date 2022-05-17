@@ -30,7 +30,7 @@ struct Job *send_to_h_q_1(struct Job *hold_q_1_head, struct Job *job) {
 }
 
 struct Job *send_to_h_q_2(struct Job *hold_q_2_head, struct Job *job) {
-    // SJF
+    // FIFO
     if (hold_q_2_head == NULL) {
         hold_q_2_head = job;
     } else {

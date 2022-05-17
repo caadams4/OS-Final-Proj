@@ -2,7 +2,7 @@
 
 
 struct Request_devices *send_to_requests(struct Request_devices *request_device_head, struct Request_devices *req) {
-    // SJF
+    // Send req event to list of requests
     if (request_device_head == NULL) {
         request_device_head = req;
     } else {
@@ -16,7 +16,7 @@ struct Request_devices *send_to_requests(struct Request_devices *request_device_
 }
 
 struct Release_devices *send_to_releases(struct Release_devices *release_device_head, struct Release_devices *req) {
-    // SJF
+    // Send req event to list of requests
     if (release_device_head == NULL) {
         release_device_head = req;
     } else {
@@ -31,7 +31,7 @@ struct Release_devices *send_to_releases(struct Release_devices *release_device_
 
 
 struct Job *send_to_ready_q(struct Job *ready_q_head, struct Job *incoming_job,struct System_status *system_status) {
-    // SJF
+    // send job to ready queue
     if (ready_q_head == NULL) {
         ready_q_head = incoming_job;
     } else {
@@ -47,7 +47,7 @@ struct Job *send_to_ready_q(struct Job *ready_q_head, struct Job *incoming_job,s
 }
 
 struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_CPU,struct System_status *system_status, int process_table[][6],int resource_table[]) {
-        
+        //switch to the ready queue head, send unmounted job to the end of the list in round robin style
         if (ready_q_head == NULL && process_table[system_status->whos_on_the_cpu->job_number][1] == 0) {
             return NULL;
         } if (ready_q_head == NULL && system_status->whos_on_the_cpu != NULL) {
@@ -96,3 +96,4 @@ struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job
     out_going_job->next = NULL;
     return complete_q;
 }
+
