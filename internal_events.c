@@ -73,7 +73,6 @@ struct Job *context_switch(struct Job *ready_q_head, struct Job *off_going_from_
 
 
         int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number][3];
-        update_resource_table(0, devices_required_4_next_job *-1,resource_table); // Take devices away from CPU
 
         
 

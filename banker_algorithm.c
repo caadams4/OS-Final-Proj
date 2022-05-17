@@ -87,3 +87,73 @@ int need[process][resources]; //resources needed
       }
 return (0);
 }
+
+/*
+#include <stdio.h>
+int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int process_table[][6],int resource_table[2]){
+
+ 
+    int n, m, i, j, k;
+    //n = 5; // Number of processes
+    //m = 3; // Number of resources
+    int num_resources = 1; // devices 
+
+    puts("bank1111111111111111111");
+ 
+    int f[num_procs], ans[num_procs], ind = 0;
+    puts("bank122222222221");
+    for (k = 0; k < n; k++) {
+        f[k] = 0;
+    }
+puts("bank22222222222");
+    int need[num_procs][num_resources];
+    for (i = 0; i < num_procs; i++) {
+            need[i][0] = max_table[i][1] - process_table[i][3];
+    }
+    puts("bank33333333");
+    int y = 0;
+    for (k = 0; k < 5; k++) {
+        for (i = 0; i < num_procs; i++) {
+            if (f[i] == 0) {
+ 
+                int flag = 0;
+                    if (need[i][0] > resource_table[1]){
+                        flag = 1;
+                         break;
+                    }
+                
+ 
+                if (flag == 0) {
+                    ans[ind++] = i;
+                    for (y = 0; y < num_resources; y++)
+                        resource_table[y] += process_table[i][y];
+                    f[i] = 1;
+                }
+            }
+        }
+    }
+   puts("bank6666666");
+      int flag = 1;
+       
+      for(int i=0;i<num_procs;i++)
+    {
+      if(f[i]==0)
+      {
+        flag=0;
+         printf("The following system is not safe");
+        break;
+      }
+    }
+     
+      if(flag==1)
+    {
+      printf("Following is the SAFE Sequence\n");
+      for (i = 0; i < num_procs - 1; i++)
+        printf(" P%i ->", ans[i]);
+      printf(" P%i", ans[num_procs - 1]);
+    }
+     
+ 
+    return (0);
+}
+*/

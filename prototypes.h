@@ -93,29 +93,27 @@ struct Job *send_to_complete_q(struct Job *complete_q, struct Job *out_going_job
 
 // --------------------- Fucntion Prototypes for system_status.c -------------------- //
 
+void print_system_status(int completed_jobs, struct System_status *system_status,int time,struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,int resource_table[],int process_table[][6]);
+
+void print_job_stats(struct System_status *system_status,int process_table[][6]);
+
 void print_process_table(struct System_status *system_status,int process_table[][6]);
 
 void print_max(struct System_status *system_status,int max_table[][2],int process_table[][6]);
 
 void print_resources(struct System_status *system_status,int resource_table[2]);
 
-void print_system_status(struct System_status *system_status);
+void print_hold_queues(struct Job *hold_q_1_head,struct Job *hold_q_2_head);
 
-void print_system_resources(void);
+void print_ready_queue(struct Job *ready_q_head,int process_table[][6]);
 
-void print_process_table (struct System_status *system_status, int process_table[][6]);
+void print_process_on_CPU(struct System_status *system_status,int process_table[][6]);
 
-void print_hold_queues(void);
-
-void print_ready_queue(void);
-
-void print_process_on_CPU(void);
-
-void print_wait_queue(void);
+void print_wait_queue();
 
 // --------------------- Fucntion Prototypes for bankers_algorithm.c -------------------- //
 
-int banker(struct Job *job, struct Request_devices *dev_req, struct Release_devices *dev_rel, struct System_status *sys_status);
+int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int process_table[][6],int resource_table[2]);
 
 
 
