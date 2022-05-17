@@ -35,11 +35,8 @@ struct Job *start_job(struct System_status *system_status, struct Job *ready_q_h
 struct Job *completed_job(struct Job *ready_q_head, struct Job *off_going_from_CPU,struct System_status *system_status, struct Job *complete_q_head,int *process_table[][6],int resource_table[]) {
 
     // mount job on CPU 
-    
-
     system_status->whos_on_the_cpu = ready_q_head;
     system_status->whos_on_the_cpu->next = NULL;
-
     ready_q_head = ready_q_head->next;
 
     if (ready_q_head == NULL) {
@@ -53,10 +50,7 @@ struct Job *completed_job(struct Job *ready_q_head, struct Job *off_going_from_C
         tmp_ready_q_head->next = off_going_from_CPU; // add job to end of the ready q
         off_going_from_CPU->next = NULL;
     }
-
-
     int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number][3];
-
 
     return ready_q_head;
 }

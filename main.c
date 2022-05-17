@@ -28,9 +28,6 @@ typedef struct Event_arrival {
   example |    2      5         3          4          6           11      |
           |_______________________________________________________________|
 */
-
-
-
 int main(void) {
   int proc_table[PROC_TABLE_SIZE][6] = {{0,0,0,0,0,0}};
   int resource_table[2] = {0,0}; // {mem,devs}
@@ -66,33 +63,18 @@ int main(void) {
         if (proc_table[system_status->whos_on_the_cpu->job_number][1] > 0) proc_table[system_status->whos_on_the_cpu->job_number][1] -= 1;
       }
       clock_to_seconds++;
-      //printf("%i\n",clock_to_seconds);
-    /* --------- CPU ----------- */
-
-      // TODO job complete 
-        // Condition: system_status->run_time == 0
-                    // aka job is complete, on to the next one
-
-        // 1. Take job off CPU and place into complete queue
-        // 2. Release memory and/or devices
-        // 3. Use bankers algorithm to determine next job from ready queue ( using device allocation )
-        // 4. Check hold queue 1 and 2 for jobs and put them into the ready queue
       if (system_status->whos_on_the_cpu != NULL){
         if (proc_table[system_status->whos_on_the_cpu->job_number][1] == 0) {
 
-          printf("finished job %i and adding %i back to memory\n",system_status->whos_on_the_cpu->job_number,proc_table[system_status->whos_on_the_cpu->job_number][2]);
           proc_table[system_status->whos_on_the_cpu->job_number][5] = clock_to_seconds;
           resource_table[0] += proc_table[system_status->whos_on_the_cpu->job_number][2];
-          printf("memory now: %i\n",resource_table[0]);
 
           completed_jobs += 1;
           complete_q = send_to_complete_q(complete_q, system_status->whos_on_the_cpu, system_status,proc_table,resource_table);
 
 
-          if (ready_q_head) { // bankers in ready_q_to_cpu
-            //bankers(system_status->number_processes, ready_q_head,max_table,proc_table,resource_table);
+          if (ready_q_head) { 
             ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
-            printf("mounting %i on cpu\nmemory now: %i\n",system_status->whos_on_the_cpu->job_number,resource_table[0]);
             system_status->time_quantum = quantum_interupt_system_baseline;
           } else {
             system_status->whos_on_the_cpu = NULL;
@@ -239,7 +221,4 @@ void print_status(struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job
     complete_q = complete_q->next;  // iterates through entire hold queue 2. sorted
   }
 
-
-
-  
 }
