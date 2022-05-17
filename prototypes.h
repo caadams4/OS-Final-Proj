@@ -115,8 +115,6 @@ void print_wait_queue(struct Job *wait_q,int process_table[][6]);
 
 int bankers(int num_procs, struct Job *ready_q_head,int max_table[][2],int process_table[][6],int resource_table[2]);
 
-
-
 // --------------------- Fucntion Prototypes for cpu.c -------------------- //
 
 struct Job *ready_q_to_CPU(struct Job *ready_queue_head, struct System_status *system_status);
@@ -132,7 +130,5 @@ struct Job *wait_q_to_CPU(struct Job *wait_q_head, struct System_status *system_
 // --------------------- Fucntion Prototypes for main.c -------------------- //
 
 struct Event_arrival *process_external_event(struct Event_arrival *event_list_head);
-
-
 
 struct Job *send_to_wait_1(struct Job *wait_q, struct Job *job);

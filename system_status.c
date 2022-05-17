@@ -2,7 +2,6 @@
 
 
 void print_system_status(int completed_jobs, struct System_status *system_status,int time,struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,int resource_table[],int process_table[][6],struct Job *wait_q) {
-
     printf("\n\nAt time %i:\nCurrent Available Main Memory=%i\nCurrent Devices=%i\nCompleted Jobs:%i\n",time,resource_table[0],resource_table[1],completed_jobs);
     print_job_stats(system_status,process_table);
     print_hold_queues(hold_q_1_head,hold_q_2_head);
@@ -10,7 +9,6 @@ void print_system_status(int completed_jobs, struct System_status *system_status
     print_process_on_CPU(system_status,process_table);
     print_wait_queue(wait_q,process_table);
 }
-
 
 
 void print_job_stats(struct System_status *system_status,int process_table[][6]) {
@@ -21,14 +19,7 @@ void print_job_stats(struct System_status *system_status,int process_table[][6])
         printf("  %i            %i             %i              %i         \n",process_table[i][0],process_table[i][4],process_table[i][5],process_table[i][5]-process_table[i][4]);
     }
 
-/*
-           _____________________PROCESS TABLE_____________________________
-  index   |   [0]     [1]      [2]        [3]        [4]         [5]      |
-  data    |   pid   runtime   memory    devices   timestart   timefinish  |
-  example |    1      5         3          4          1           6       |
-  example |    2      5         3          4          6           11      |
-          |_______________________________________________________________|
-*/
+
 }
 void print_process_table(struct System_status *system_status,int process_table[][6]) {
             puts("-----------------------");
@@ -37,14 +28,6 @@ void print_process_table(struct System_status *system_status,int process_table[]
     for (int i = 1; i<system_status->number_processes+1;i++) {
         printf("  %i      %i       %i       \n",process_table[i][0],process_table[i][2],process_table[i][3]);
     }
-/*
-           _____________________PROCESS TABLE_____________________________
-  index   |   [0]     [1]      [2]        [3]        [4]         [5]      |
-  data    |   pid   runtime   memory    devices   timestart   timefinish  |
-  example |    1      5         3          4          1           6       |
-  example |    2      5         3          4          6           11      |
-          |_____________________________________________________+__________|
-*/
 }
 
 void print_max(struct System_status *system_status,int max_table[][2],int process_table[][6]) {
