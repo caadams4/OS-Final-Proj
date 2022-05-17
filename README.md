@@ -18,13 +18,11 @@ For help with c file structure and compliation https://courses.cs.washington.edu
 
 TODO:
 
-- print system status with all queues (charles working on this @ 7:29 pm)
-
 - implement bankers algorithm 
   - returns ready queue safe sequence ( worse option )
   - or returns next safe job from ready queue ( better option )
   
-- when mounted on CPU, job checks for requests/releases 
+- when mounted on CPU, job checks for requests/releases  (charles working on this @ 9:29 pm)
   - if found, immediately send to wait queue and process next ready queue node
   
 - check wait queue before hold queues 
