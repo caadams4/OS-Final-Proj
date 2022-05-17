@@ -1,31 +1,19 @@
 #include "prototypes.h"
 
 
-void print_system_status(struct System_status *system_status) {
+void print_system_status(int completed_jobs, struct System_status *system_status,int time,struct Job *hold_q_1_head,struct Job *hold_q_2_head,struct Job *ready_q_head,int resource_table[],int process_table[][6]) {
 
-    print_system_resources();
+    printf("At time %i:\nCurrent Available Main Memory=%i\nCurrent Devices=%i\nCompleted Jobs:%i\n",time,resource_table[0],resource_table[1],completed_jobs);
+    print_job_stats(system_status,process_table);
+    print_hold_queues(hold_q_1_head,hold_q_2_head);
 
-    print_hold_queues();
+    print_ready_queue(ready_q_head);
 
-    print_ready_queue();
-
-    print_process_on_CPU();
+    print_process_on_CPU(system_status,process_table);
     print_wait_queue();
 }
 
-void update_resource_table(int memory_update, int devices_update,int resource_table[]) {
-    resource_table[0] += memory_update;
-    resource_table[1] += devices_update;
-}
 
-
-
-
-
-
-void print_system_resources() {
-    printf("At time 9999:\nCurrent Available Main Memory=200\nCurrent Devices=12\nCompleted Jobs:\n");
-}
 
 void print_job_stats(struct System_status *system_status,int process_table[][6]) {
     puts("--------------------------------------------------------\n");
@@ -67,29 +55,28 @@ void print_max(struct System_status *system_status,int max_table[][2],int proces
             puts("========================\n");
     
     for (int i = 1; i<system_status->number_processes+1;i++) {
-        printf("  %i      %i          %i\n",process_table[i][0],max_table[i][0],max_table[i][1]);
+        printf("  %i      %i        %i\n",process_table[i][0],max_table[i][0],max_table[i][1]);
     }
-    
 }
 
 void print_resources(struct System_status *system_status,int resource_table[2]) {
             puts("-----------------\n");
             puts("memory    devices\n");
             puts("=================\n");
-
           printf(" %i         %i\n",resource_table[0],resource_table[1]);
 }
 
-void print_hold_queues() {
-    puts("\nHold Queue 1:\n");
-    puts("-------------------------\n");
-    puts("Job ID    Run Time");
+void print_hold_queues(struct Job *hold_q_1_head,struct Job *hold_q_2_head) {
+       puts("\nHold Queue 1:\n");
+       puts("-------------------------\n");
+       puts("Job ID    Run Time");
     puts("=========================\n");
 
-    /*
-    TODO: print each HQ1 node in its own line
-    printf("  %i        %i\n");
-    */
+    struct Job *tmp_hold_q_1_head = hold_q_1_head;
+    while (tmp_hold_q_1_head != NULL) {   // prints Hold queue 1 contents
+        printf("%i       %i\n",tmp_hold_q_1_head->job_number,tmp_hold_q_1_head->run_time);
+        tmp_hold_q_1_head = tmp_hold_q_1_head->next;  // iterates through entire hold queue 2. sorted
+    }  
 
     // for each hold queue 2 node
     puts("\nHold Queue 2:\n");
@@ -97,34 +84,37 @@ void print_hold_queues() {
     puts("Job ID    Run Time");
     puts("=========================\n");
 
-    /*
-    TODO: print each HQ2 node in its own line
-    printf("  %i        %i\n");
-    */
+    struct Job *tmp_hold_q_2_head = hold_q_2_head;
+    while (tmp_hold_q_2_head != NULL) {   // prints Hold queue 2 contents
+        printf("FIFO Queue (hold Q 2) Runtime: %i - Job No. %i\n",tmp_hold_q_2_head->run_time,tmp_hold_q_2_head->job_number);
+        tmp_hold_q_2_head = tmp_hold_q_2_head->next;  // iterates through entire hold queue 2. sorted
+    }  
 }
 
-void print_ready_queue(){
+             
+    
+
+void print_ready_queue(struct Job *ready_q_head){
     puts("\nReady Queue:\n");
     puts("----------------------------------\n");
     puts("Job ID    Run Time Time    Accrued\n");
     puts("==================================\n");
 
-    /*
-    TODO: print each Ready queue node in its own line
-    printf("  %i           %i          %i\n");
-    */
+    struct Job *tmp_ready_q_head = ready_q_head;
+    while (tmp_ready_q_head != NULL){
+        printf("Ready queue Runtime: %i - Job No. %i\n",tmp_ready_q_head->run_time,tmp_ready_q_head->job_number);
+        tmp_ready_q_head = tmp_ready_q_head->next;  // iterates through entire hold queue 2. sorted
+    }
 }
 
-void print_process_on_CPU(){
-    puts("\nProcess running on CPU:\n");
-    puts("----------------------------------\n");
-    puts("Job ID    Run Time Time    Accrued\n");
-    puts("==================================\n");
-
-    /*
-    TODO: print process info in its own line
-    printf("  %i           %i          %i\n");
-    */
+void print_process_on_CPU(struct System_status *system_status,int process_table[][6]){
+      puts("\nProcess running on CPU:\n");
+      puts("-----------------------------\n");
+      puts("Job ID    Run Time    Accrued\n");
+      puts("=============================\n");
+      if (system_status->whos_on_the_cpu)
+    printf("  %i         %i         %i\n",system_status->whos_on_the_cpu->job_number,system_status->whos_on_the_cpu->run_time,system_status->whos_on_the_cpu->run_time-process_table[system_status->whos_on_the_cpu->job_number][1]);
+    
 }
 
 void print_wait_queue(){

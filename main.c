@@ -50,9 +50,10 @@ int main(void) {
   struct System_status *system_status = event_list_head->system_status; // creates a struct system config
   max_devices = system_status->serial_devices_available;
   max_memory = system_status->memory_available;
-  update_resource_table(max_memory,max_devices,resource_table);
+  resource_table[0] = max_memory;
+  resource_table[1] = max_devices;
   quantum_interupt_system_baseline = system_status->time_quantum;
-  int num_jobs = 0;
+  int num_jobs = 0, completed_jobs = 0;
   int time_interval;
   while (event_list_head != NULL) { // iterates through each event!
 
@@ -84,10 +85,12 @@ int main(void) {
           resource_table[0] += proc_table[system_status->whos_on_the_cpu->job_number][2];
           printf("memory now: %i\n",resource_table[0]);
 
-
+          completed_jobs += 1;
           complete_q = send_to_complete_q(complete_q, system_status->whos_on_the_cpu, system_status,proc_table,resource_table);
 
-          if (ready_q_head) {
+
+          if (ready_q_head) { // bankers in ready_q_to_cpu
+            //bankers(system_status->number_processes, ready_q_head,max_table,proc_table,resource_table);
             ready_q_head = ready_q_to_CPU(ready_q_head,system_status);
             printf("mounting %i on cpu\nmemory now: %i\n",system_status->whos_on_the_cpu->job_number,resource_table[0]);
             system_status->time_quantum = quantum_interupt_system_baseline;
@@ -194,9 +197,8 @@ int main(void) {
         } else if (event_list_head->release_devices) {  
           release_device_head = send_to_releases(release_device_head, event_list_head->release_devices);
         } else if (event_list_head->display_status == 1) {
+          print_system_status(completed_jobs, system_status,clock_to_seconds,hold_q_1_head,hold_q_2_head,ready_q_head,resource_table,proc_table);
 
-          print_job_stats(system_status,proc_table);
-          //print_system_status(system_status);
           // TODO make the display status pretty
         }
 
@@ -213,10 +215,6 @@ int main(void) {
 
     if (system_status->whos_on_the_cpu == NULL && ready_q_head != NULL) system_status->whos_on_the_cpu = ready_q_head;
   }
-  print_status(hold_q_1_head,hold_q_2_head,ready_q_head,complete_q,system_status); // Print status for situational awareness
-  print_max(system_status,max_table,proc_table);
-  print_resources(system_status,resource_table);
-  print_process_table(system_status,proc_table);
   return 0;
 }
 

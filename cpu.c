@@ -26,8 +26,6 @@ struct Job *start_job(struct System_status *system_status, struct Job *ready_q_h
 
     // release devices and memory 
 
-    // TODO send job to complete function
-    update_resource_table(system_status->whos_on_the_cpu->memory_required,1,process_table);
 
     // update run times/ start/ finish
     system_status->whos_on_the_cpu == NULL;
@@ -38,7 +36,6 @@ struct Job *completed_job(struct Job *ready_q_head, struct Job *off_going_from_C
 
     // mount job on CPU 
     
-    update_resource_table(0, process_table[system_status->whos_on_the_cpu->job_number][3],resource_table); 
 
     system_status->whos_on_the_cpu = ready_q_head;
     system_status->whos_on_the_cpu->next = NULL;
@@ -59,7 +56,6 @@ struct Job *completed_job(struct Job *ready_q_head, struct Job *off_going_from_C
 
 
     int devices_required_4_next_job = process_table[system_status->whos_on_the_cpu->job_number][3];
-    update_resource_table(0, devices_required_4_next_job *-1,resource_table); // Take devices away from CPU
 
 
     return ready_q_head;
