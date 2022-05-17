@@ -66,7 +66,7 @@ int main(void) {
         if (proc_table[system_status->whos_on_the_cpu->job_number][1] > 0) proc_table[system_status->whos_on_the_cpu->job_number][1] -= 1;
       }
       clock_to_seconds++;
-      printf("%i\n",clock_to_seconds);
+      //printf("%i\n",clock_to_seconds);
     /* --------- CPU ----------- */
 
       // TODO job complete 

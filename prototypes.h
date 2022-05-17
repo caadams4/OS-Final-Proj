@@ -105,7 +105,7 @@ void print_resources(struct System_status *system_status,int resource_table[2]);
 
 void print_hold_queues(struct Job *hold_q_1_head,struct Job *hold_q_2_head);
 
-void print_ready_queue(struct Job *ready_q_head);
+void print_ready_queue(struct Job *ready_q_head,int process_table[][6]);
 
 void print_process_on_CPU(struct System_status *system_status,int process_table[][6]);
 
