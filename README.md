@@ -1,4 +1,4 @@
-#Scheduling prpgram written in C that schedules jobs based on either shortest job first or first in first out. 
+# Scheduling prpgram written in C that schedules jobs based on either shortest job first or first in first out. 
 
 #FILE STRUCTURES & HEADERS:
 
