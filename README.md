@@ -1,3 +1,5 @@
+#Scheduling prpgram written in C that schedules jobs based on either shortest job first or first in first out. 
+
 #FILE STRUCTURES & HEADERS:
 
   - main.c -> include all supporting .h files here... do not include other .c files 
@@ -14,12 +16,5 @@
 
 
 For help with c file structure and compliation https://courses.cs.washington.edu/courses/cse374/20au/lectures/12-structs-in-c/12-structs-in-c.pdf
-
-
-TODO:
-
-- implement bankers algorithm 
-  - returns ready queue safe sequence ( worse option )
-  - or returns next safe job from ready queue ( better option )
 
   
