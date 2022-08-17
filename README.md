@@ -1,16 +1,16 @@
 # Scheduling prpgram written in C that schedules jobs based on either shortest job first or first in first out. 
 
-#FILE STRUCTURES & HEADERS:
+FILE STRUCTURES & HEADERS:
 
   - main.c -> include all supporting .h files here... do not include other .c files 
   - [supporting .c file].c -> include this file's .h file here
   - if you create a struct, define the struct in the .h file you use it
 
-#TO COMPILE:
+TO COMPILE:
 
   - gcc -o a.out [supporting .c file here] [supporting .c file here] main.c
 
-#TO RUN:
+TO RUN:
 
   - ./a.out
 
