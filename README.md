@@ -1,3 +1,6 @@
+# Rewriting this over Winter break in C++
+
+
 # Scheduling prpgram written in C that schedules jobs based on either shortest job first or first in first out. 
 
 FILE STRUCTURES & HEADERS:
